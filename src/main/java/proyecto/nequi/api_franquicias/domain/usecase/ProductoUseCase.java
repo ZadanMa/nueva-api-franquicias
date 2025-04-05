@@ -58,6 +58,14 @@ public class ProductoUseCase implements ProductoServicePort {
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND)))
                 .filter(producto -> nuevoStock >= 0)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NEGATIVE_STOCK)))
-                .flatMap(producto -> persistencePort.updateStock(productoId, nuevoStock));
+                .flatMap(existing -> {
+                    Producto updated = new Producto(
+                            existing.id(),
+                            existing.nombre(),
+                            nuevoStock,
+                            existing.sucursalId()
+                    );
+                    return persistencePort.updateStock(productoId, nuevoStock).thenReturn(updated);
+                });
     }
 }

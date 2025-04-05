@@ -47,6 +47,7 @@ public class ProductoPersistenceAdapter implements ProductoPersistencePort {
         return repository.updateStock(productoId, nuevoStock);
     }
 
+
     @Override
     public Flux<Producto> findAll() {
         return repository.findAll()

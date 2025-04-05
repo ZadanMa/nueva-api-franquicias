@@ -7,6 +7,7 @@ import proyecto.nequi.api_franquicias.domain.api.ProductoServicePort;
 import proyecto.nequi.api_franquicias.domain.exceptions.BusinessException;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.ProductoDTO;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.ProductoUpdateDTO;
+import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.ProductoUpdateStockDTO;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.mapper.ProductoDTOMapper;
 import reactor.core.publisher.Mono;
 
@@ -62,8 +63,8 @@ public class ProductoHandler {
 
     public Mono<ServerResponse> modificarStockProducto(ServerRequest request) {
         Long productoId = Long.valueOf(request.pathVariable("productoId"));
-        return request.bodyToMono(Integer.class)
-                .flatMap(nuevoStock -> servicePort.modificarStockProducto(productoId, nuevoStock))
+        return request.bodyToMono(ProductoUpdateStockDTO.class)
+                .flatMap(dto -> servicePort.modificarStockProducto(productoId, dto.nuevoStock()))
                 .map(dtoMapper::toDto)
                 .flatMap(dto -> ServerResponse.ok().bodyValue(dto))
                 .onErrorResume(BusinessException.class, ex -> ServerResponse.badRequest().bodyValue(ex.getMessage()));
