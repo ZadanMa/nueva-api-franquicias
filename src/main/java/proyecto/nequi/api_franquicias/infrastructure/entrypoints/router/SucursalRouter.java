@@ -14,8 +14,6 @@ public class SucursalRouter {
     public RouterFunction<ServerResponse> sucursalRoutes(SucursalHandler handler) {
         return route()
                 .POST("/sucursales", handler::registrarSucursal)
-                .POST("/franquicias/{franquiciaId}/sucursales", handler::agregarSucursal)
-                .PUT("/sucursales/{sucursalId}/asociar-franquicia/{franquiciaId}", handler::asociarSucursalAFranquicia)
                 .GET("/sucursales", handler::getAllSucursales)
                 .GET("/sucursales/{sucursalId}", handler::getSucursalById)
                 .PUT("/sucursales/{sucursalId}/nombre", handler::actualizarNombreSucursal)

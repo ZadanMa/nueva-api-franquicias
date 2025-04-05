@@ -9,8 +9,6 @@ import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.SucursalDTO
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.SucursalUpdateDTO;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.mapper.SucursalDTOMapper;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.Flux;
-import java.util.Map;
 
 @Component
 public class SucursalHandler {
@@ -29,22 +27,6 @@ public class SucursalHandler {
                 .map(dtoMapper::toDto)
                 .flatMap(dto -> ServerResponse.status(201).bodyValue(dto))
                 .onErrorResume(BusinessException.class, ex -> ServerResponse.badRequest().bodyValue(ex.getMessage()));
-    }
-
-    public Mono<ServerResponse> agregarSucursal(ServerRequest request) {
-        Long franquiciaId = Long.valueOf(request.pathVariable("franquiciaId"));
-        return request.bodyToMono(SucursalDTO.class)
-                .flatMap(dto -> servicePort.agregarSucursal(franquiciaId, dtoMapper.toModel(dto)))
-                .map(dtoMapper::toDto)
-                .flatMap(dto -> ServerResponse.status(201).bodyValue(dto))
-                .onErrorResume(BusinessException.class, ex -> ServerResponse.badRequest().bodyValue(ex.getMessage()));
-    }
-
-    public Mono<ServerResponse> asociarSucursalAFranquicia(ServerRequest request) {
-        Long franquiciaId = Long.valueOf(request.pathVariable("franquiciaId"));
-        Long sucursalId = Long.valueOf(request.pathVariable("sucursalId"));
-        return servicePort.asociarSucursalAFranquicia(franquiciaId, sucursalId)
-                .then(ServerResponse.ok().build());
     }
 
     public Mono<ServerResponse> getAllSucursales(ServerRequest request) {

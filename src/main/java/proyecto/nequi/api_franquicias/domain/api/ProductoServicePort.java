@@ -6,8 +6,6 @@ import reactor.core.publisher.Mono;
 
 public interface ProductoServicePort {
     Mono<Producto> registrarProducto(Producto producto);
-    Mono<Producto> agregarProducto(Long sucursalId, Producto producto);
-    Mono<Producto> asociarProductoASucursal(Long sucursalId, Long productoId);
     Flux<Producto> getAllProductos();
     Mono<Producto> getProductoById(Long productoId);
     Mono<Void> eliminarProducto(Long productoId);

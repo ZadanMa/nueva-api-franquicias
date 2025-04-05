@@ -54,11 +54,6 @@ public class SucursalPersistenceAdapter implements SucursalPersistencePort {
     }
 
     @Override
-    public Mono<Sucursal> asociarSucursalAFranquicia(Long franquiciaId, Long sucursalId) {
-        return repository.asociarSucursalAFranquicia(franquiciaId, sucursalId);
-    }
-
-    @Override
     public Flux<Map<String, Object>> productoConMasStockPorSucursal(Long franquiciaId) {
         return repository.productoConMasStockPorSucursal(franquiciaId);
     }

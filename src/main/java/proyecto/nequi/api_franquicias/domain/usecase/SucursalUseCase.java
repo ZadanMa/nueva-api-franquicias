@@ -27,24 +27,6 @@ public class SucursalUseCase implements SucursalServicePort {
     }
 
     @Override
-    public Mono<Sucursal> agregarSucursal(Long franquiciaId, Sucursal sucursal) {
-        return persistencePort.existsByFranquiciaIdAndNombre(franquiciaId, sucursal.nombre())
-                .filter(exists -> !exists)
-                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.SUCURSAL_ALREADY_EXISTS)))
-                .flatMap(exists -> {
-                    Sucursal sucursalConFranquicia = new Sucursal(null, sucursal.nombre(), franquiciaId);
-                    return persistencePort.save(sucursalConFranquicia);
-                });
-    }
-
-    @Override
-    public Mono<Sucursal> asociarSucursalAFranquicia(Long franquiciaId, Long sucursalId) {
-        return persistencePort.findById(sucursalId)
-                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.SUCURSAL_NOT_FOUND))) 
-                .flatMap(sucursal -> persistencePort.asociarSucursalAFranquicia(franquiciaId, sucursalId));
-    }
-
-    @Override
     public Flux<Sucursal> getAllSucursales() {
         return persistencePort.findAll();
     }

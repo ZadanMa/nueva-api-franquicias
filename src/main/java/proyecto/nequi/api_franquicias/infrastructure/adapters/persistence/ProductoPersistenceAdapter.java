@@ -48,11 +48,6 @@ public class ProductoPersistenceAdapter implements ProductoPersistencePort {
     }
 
     @Override
-    public Mono<Void> asociarProductoASucursal(Long sucursalId, Long productoId) {
-        return repository.asociarProductoASucursal(sucursalId, productoId);
-    }
-
-    @Override
     public Flux<Producto> findAll() {
         return repository.findAll()
                 .map(mapper::toModel);

@@ -10,7 +10,6 @@ public interface ProductoPersistencePort {
     Mono<Producto> findById(Long productoId);
     Mono<Producto> updateNombre(Long productoId, String nuevoNombre);
     Mono<Producto> updateStock(Long productoId, int nuevoStock);
-    Mono<Void> asociarProductoASucursal(Long sucursalId, Long productoId);
     Flux<Producto> findAll();
     Mono<Void> deleteById(Long productoId);
 }

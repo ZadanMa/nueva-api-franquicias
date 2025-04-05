@@ -6,6 +6,6 @@ import reactor.core.publisher.Mono;
 
 public interface FranquiciaServicePort {
     Mono<Franquicia> registerFranquicia(Franquicia franquicia);
-    Mono<Franquicia> updateFranquicia(Long id, Franquicia franquicia);
+    Mono<Franquicia> updateFranquiciaName(Long id, String newName);
     Mono<FranquiciaWithDetails> getFranquiciaWithDetails(Long id);
 }

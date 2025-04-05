@@ -11,9 +11,6 @@ public interface ProductoRepository extends ReactiveCrudRepository<ProductoEntit
     Mono<Boolean> existsBySucursalIdAndNombre(Long sucursalId, String nombre);
     Mono<ProductoEntity> findById(Long productoId);
 
-    @Query("UPDATE productos SET sucursal_id = :sucursalId WHERE id = :productoId")
-    Mono<Void> asociarProductoASucursal(@Param("sucursalId") Long sucursalId, @Param("productoId") Long productoId);
-
     @Query("UPDATE productos SET stock = :nuevoStock WHERE id = :productoId")
     Mono<Producto> updateStock(@Param("productoId") Long productoId, @Param("nuevoStock") int nuevoStock);
 

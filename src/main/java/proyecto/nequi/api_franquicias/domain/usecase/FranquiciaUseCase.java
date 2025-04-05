@@ -24,12 +24,12 @@ public class FranquiciaUseCase implements FranquiciaServicePort {
                 .flatMap(exists -> persistencePort.save(franquicia));
     }
     @Override
-    public Mono<Franquicia> updateFranquicia(Long id, Franquicia franquicia) {
+    public Mono<Franquicia> updateFranquiciaName(Long id, String newName) {
         return persistencePort.findById(id)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NOT_FOUND)))
                 .flatMap(existing -> {
-                    Franquicia updated = new Franquicia(id, franquicia.nombre());
-                    return persistencePort.save(updated);
+                    Franquicia updated = new Franquicia(id, newName);
+                    return persistencePort.updateName(id, newName);
                 });
     }
 

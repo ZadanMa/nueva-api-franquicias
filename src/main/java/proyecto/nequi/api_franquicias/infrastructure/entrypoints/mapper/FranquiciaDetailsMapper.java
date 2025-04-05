@@ -1,4 +1,4 @@
-// Infrastructure/entrypoints/mapper/FranquiciaDetailsMapper.java
+
 package proyecto.nequi.api_franquicias.infrastructure.entrypoints.mapper;
 
 import org.mapstruct.Mapper;

@@ -9,6 +9,7 @@ import proyecto.nequi.api_franquicias.domain.api.FranquiciaServicePort;
 import proyecto.nequi.api_franquicias.domain.exceptions.BusinessException;
 import proyecto.nequi.api_franquicias.domain.exceptions.TechnicalException;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.FranquiciaDTO;
+import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.FranquiciaUpdateDTO;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.mapper.FranquiciaDTOMapper;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.mapper.FranquiciaDetailsMapper;
 import reactor.core.publisher.Mono;
@@ -39,10 +40,10 @@ public class FranquiciaHandler {
                 .onErrorResume(BusinessException.class, ex -> ServerResponse.badRequest().bodyValue(ex.getMessage()))
                 .onErrorResume(TechnicalException.class, ex -> ServerResponse.status(500).bodyValue(ex.getMessage()));
     }
-    public Mono<ServerResponse> updateFranquicia(ServerRequest request) {
+    public Mono<ServerResponse> updateFranquiciaName(ServerRequest request) {
         Long id = Long.valueOf(request.pathVariable("id"));
-        return request.bodyToMono(FranquiciaDTO.class)
-                .flatMap(dto -> servicePort.updateFranquicia(id, dtoMapper.toModel(dto)))
+        return request.bodyToMono(FranquiciaUpdateDTO.class)
+                .flatMap(dto -> servicePort.updateFranquiciaName(id, dto.newName()))
                 .map(dtoMapper::toDto)
                 .flatMap(dto -> ServerResponse.ok().bodyValue(dto))
                 .onErrorResume(BusinessException.class, ex -> ServerResponse.notFound().build());

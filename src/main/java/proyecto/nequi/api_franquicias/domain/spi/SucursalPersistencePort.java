@@ -12,6 +12,5 @@ public interface SucursalPersistencePort {
     Mono<Sucursal> findById(Long sucursalId);
     Mono<Sucursal> updateNombre(Long sucursalId, String nuevoNombre);
     Flux<Sucursal> findAll();
-    Mono<Sucursal> asociarSucursalAFranquicia(Long franquiciaId, Long sucursalId);
     Flux<Map<String, Object>> productoConMasStockPorSucursal(Long franquiciaId);
 }

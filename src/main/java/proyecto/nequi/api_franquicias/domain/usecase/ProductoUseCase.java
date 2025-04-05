@@ -22,30 +22,6 @@ public class ProductoUseCase implements ProductoServicePort {
     }
 
     @Override
-    public Mono<Producto> agregarProducto(Long sucursalId, Producto producto) {
-        return persistencePort.existsBySucursalIdAndNombre(sucursalId, producto.nombre())
-                .filter(exists -> !exists)
-                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_ALREADY_EXISTS)))
-                .flatMap(exists -> {
-                    Producto productoConSucursal = new Producto(
-                            producto.id(),
-                            producto.nombre(),
-                            producto.stock(),
-                            sucursalId
-                    );
-                    return persistencePort.save(productoConSucursal);
-                });
-    }
-
-    @Override
-    public Mono<Producto> asociarProductoASucursal(Long sucursalId, Long productoId) {
-        return persistencePort.findById(productoId)
-                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND)))
-                .flatMap(producto -> persistencePort.asociarProductoASucursal(sucursalId, productoId)
-                    .thenReturn(producto));
-    }
-
-    @Override
     public Flux<Producto> getAllProductos() {
         return persistencePort.findAll();
     }
@@ -65,7 +41,15 @@ public class ProductoUseCase implements ProductoServicePort {
     public Mono<Producto> actualizarNombreProducto(Long productoId, String nuevoNombre) {
         return persistencePort.findById(productoId)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND)))
-                .flatMap(producto -> persistencePort.updateNombre(productoId, nuevoNombre));
+                .flatMap(existing -> {
+                    Producto updated = new Producto(
+                            existing.id(),
+                            nuevoNombre,
+                            existing.stock(),
+                            existing.sucursalId()
+                    );
+                    return persistencePort.updateNombre(productoId, nuevoNombre).thenReturn(updated);
+            });
     }
 
     @Override

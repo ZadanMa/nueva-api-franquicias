@@ -1,4 +1,6 @@
 spring:
+  application:
+    name : api-franquicias
   r2dbc:
     url: r2dbc:mysql://localhost:3306/franquicias_db
     username: root

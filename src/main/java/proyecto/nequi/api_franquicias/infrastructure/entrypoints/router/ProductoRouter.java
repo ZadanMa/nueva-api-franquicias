@@ -14,8 +14,6 @@ public class ProductoRouter {
     public RouterFunction<ServerResponse> productoRoutes(ProductoHandler handler) {
         return route()
                 .POST("/productos", handler::registrarProducto)
-                .POST("/sucursales/{sucursalId}/productos", handler::agregarProducto)
-                .PUT("/productos/{productoId}/asociar-sucursal/{sucursalId}", handler::asociarProductoASucursal)
                 .GET("/productos", handler::getAllProductos)
                 .GET("/productos/{productoId}", handler::getProductoById)
                 .DELETE("/productos/{productoId}", handler::eliminarProducto)

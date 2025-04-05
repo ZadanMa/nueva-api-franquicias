@@ -9,7 +9,6 @@ import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.ProductoDTO
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.ProductoUpdateDTO;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.mapper.ProductoDTOMapper;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.Flux;
 
 @Component
 public class ProductoHandler {
@@ -30,21 +29,6 @@ public class ProductoHandler {
                 .onErrorResume(BusinessException.class, ex -> ServerResponse.badRequest().bodyValue(ex.getMessage()));
     }
 
-    public Mono<ServerResponse> agregarProducto(ServerRequest request) {
-        Long sucursalId = Long.valueOf(request.pathVariable("sucursalId"));
-        return request.bodyToMono(ProductoDTO.class)
-                .flatMap(dto -> servicePort.agregarProducto(sucursalId, dtoMapper.toModel(dto)))
-                .map(dtoMapper::toDto)
-                .flatMap(dto -> ServerResponse.status(201).bodyValue(dto))
-                .onErrorResume(BusinessException.class, ex -> ServerResponse.badRequest().bodyValue(ex.getMessage()));
-    }
-
-    public Mono<ServerResponse> asociarProductoASucursal(ServerRequest request) {
-        Long sucursalId = Long.valueOf(request.pathVariable("sucursalId"));
-        Long productoId = Long.valueOf(request.pathVariable("productoId"));
-        return servicePort.asociarProductoASucursal(sucursalId, productoId)
-                .then(ServerResponse.ok().build());
-    }
 
     public Mono<ServerResponse> getAllProductos(ServerRequest request) {
         return servicePort.getAllProductos()

@@ -8,8 +8,6 @@ import java.util.Map;
 
 public interface SucursalServicePort {
     Mono<Sucursal> registrarSucursal(Sucursal sucursal);
-    Mono<Sucursal> agregarSucursal(Long franquiciaId, Sucursal sucursal);
-    Mono<Sucursal> asociarSucursalAFranquicia(Long franquiciaId, Long sucursalId);
     Flux<Sucursal> getAllSucursales();
     Mono<Sucursal> getSucursalById(Long sucursalId);
     Mono<Sucursal> actualizarNombreSucursal(Long sucursalId, String nuevoNombre);

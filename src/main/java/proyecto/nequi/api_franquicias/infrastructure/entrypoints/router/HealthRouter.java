@@ -4,19 +4,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import proyecto.nequi.api_franquicias.infrastructure.entrypoints.handler.FranquiciaHandler;
-
+import proyecto.nequi.api_franquicias.infrastructure.entrypoints.handler.HealthHandler;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
-public class FranquiciaRouter {
+public class HealthRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> franquiciaRoutes(FranquiciaHandler handler) {
+    public RouterFunction<ServerResponse> healthRoutes(HealthHandler handler) {
         return route()
-                .POST("/franquicias", handler::registerFranquicia)
-                .PUT("/franquicias/{id}", handler::updateFranquiciaName)
-                .GET("/franquicias/{id}/full", handler::getFranquiciaWithDetails)
+                .GET("/health", handler::health)
                 .build();
     }
 }
