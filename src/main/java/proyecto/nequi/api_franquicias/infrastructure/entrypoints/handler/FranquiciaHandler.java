@@ -1,6 +1,5 @@
 package proyecto.nequi.api_franquicias.infrastructure.entrypoints.handler;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -31,7 +30,6 @@ public class FranquiciaHandler {
         this.detailsMapper = detailsMapper;
     }
 
-    @Operation(summary = "Registrar una franquicia")
     public Mono<ServerResponse> registerFranquicia(ServerRequest request) {
         return request.bodyToMono(FranquiciaDTO.class)
                 .flatMap(dto -> servicePort.registerFranquicia(dtoMapper.toModel(dto)))
@@ -40,6 +38,7 @@ public class FranquiciaHandler {
                 .onErrorResume(BusinessException.class, ex -> ServerResponse.badRequest().bodyValue(ex.getMessage()))
                 .onErrorResume(TechnicalException.class, ex -> ServerResponse.status(500).bodyValue(ex.getMessage()));
     }
+
     public Mono<ServerResponse> updateFranquiciaName(ServerRequest request) {
         Long id = Long.valueOf(request.pathVariable("id"));
         return request.bodyToMono(FranquiciaUpdateDTO.class)
