@@ -1,4 +1,3 @@
-// Domain Model (FranquiciaWithDetails.java)
 package proyecto.nequi.api_franquicias.domain.model;
 
 import java.util.List;

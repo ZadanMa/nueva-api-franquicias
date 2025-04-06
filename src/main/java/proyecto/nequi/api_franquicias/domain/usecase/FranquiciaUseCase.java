@@ -1,15 +1,21 @@
 package proyecto.nequi.api_franquicias.domain.usecase;
 
+import io.r2dbc.spi.R2dbcException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import proyecto.nequi.api_franquicias.domain.api.FranquiciaServicePort;
 import proyecto.nequi.api_franquicias.domain.enums.TechnicalMessage;
 import proyecto.nequi.api_franquicias.domain.exceptions.BusinessException;
+import proyecto.nequi.api_franquicias.domain.exceptions.TechnicalException;
 import proyecto.nequi.api_franquicias.domain.model.Franquicia;
 import proyecto.nequi.api_franquicias.domain.model.FranquiciaWithDetails;
 import proyecto.nequi.api_franquicias.domain.spi.FranquiciaPersistencePort;
 import reactor.core.publisher.Mono;
 
+
 public class FranquiciaUseCase implements FranquiciaServicePort {
 
+    private final Logger log = LoggerFactory.getLogger(FranquiciaUseCase.class);
     private final FranquiciaPersistencePort persistencePort;
 
     public FranquiciaUseCase(FranquiciaPersistencePort persistencePort) {
@@ -19,23 +25,30 @@ public class FranquiciaUseCase implements FranquiciaServicePort {
     @Override
     public Mono<Franquicia> registerFranquicia(Franquicia franquicia) {
         return persistencePort.existsByName(franquicia.nombre())
-                .filter(exists -> !exists)
-                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_ALREADY_EXISTS)))
-                .flatMap(exists -> persistencePort.save(franquicia));
+                .flatMap(exists -> exists
+                        ? Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NAME_FOUND))
+                        : persistencePort.save(franquicia))
+                .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_SAVE_ENTITY));
     }
+
     @Override
     public Mono<Franquicia> updateFranquiciaName(Long id, String newName) {
         return persistencePort.findById(id)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NOT_FOUND)))
-                .flatMap(existing -> {
-                    Franquicia updated = new Franquicia(id, newName);
-                    return persistencePort.updateName(id, newName);
-                });
+                .flatMap(existing -> persistencePort.existsByName(newName)
+                        .flatMap(exists -> exists
+                                ? Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NAME_FOUND))
+                                : persistencePort.updateName(id, newName)))
+                .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_UPDATE_NAME));
     }
 
-    @Override
-    public Mono<FranquiciaWithDetails> getFranquiciaWithDetails(Long id) {
-        return persistencePort.findWithDetailsById(id)
-                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NOT_FOUND)));
-    }
+//    @Override
+//    public Mono<FranquiciaWithDetails> getFranquiciaWithDetails(Long id) {
+//        return persistencePort.findWithDetailsById(id)
+//                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NOT_FOUND)))
+//                .onErrorMap(ex -> {
+//                    log.error("Error técnico al recuperar franquicia: {}", ex.getMessage());
+//                    return new TechnicalException(TechnicalMessage.FAILED_TO_RETRIEVE_ENTITY);
+//                });
+//    }
 }

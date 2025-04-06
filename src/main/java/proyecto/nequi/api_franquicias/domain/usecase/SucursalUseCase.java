@@ -3,6 +3,7 @@ package proyecto.nequi.api_franquicias.domain.usecase;
 import proyecto.nequi.api_franquicias.domain.api.SucursalServicePort;
 import proyecto.nequi.api_franquicias.domain.enums.TechnicalMessage;
 import proyecto.nequi.api_franquicias.domain.exceptions.BusinessException;
+import proyecto.nequi.api_franquicias.domain.exceptions.TechnicalException;
 import proyecto.nequi.api_franquicias.domain.model.Sucursal;
 import proyecto.nequi.api_franquicias.domain.spi.SucursalPersistencePort;
 import reactor.core.publisher.Flux;
@@ -21,9 +22,10 @@ public class SucursalUseCase implements SucursalServicePort {
     @Override
     public Mono<Sucursal> registrarSucursal(Sucursal sucursal) {
         return persistencePort.existsByFranquiciaIdAndNombre(sucursal.franquiciaId(), sucursal.nombre())
-                .filter(exists -> !exists)
-                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.SUCURSAL_ALREADY_EXISTS)))
-                .flatMap(exists -> persistencePort.save(sucursal));
+                .flatMap(exists -> exists
+                        ? Mono.error(new BusinessException(TechnicalMessage.SUCURSAL_ALREADY_EXISTS))
+                        : persistencePort.save(sucursal))
+                .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_SAVE_ENTITY));
     }
 
     @Override
@@ -41,7 +43,11 @@ public class SucursalUseCase implements SucursalServicePort {
     public Mono<Sucursal> actualizarNombreSucursal(Long sucursalId, String nuevoNombre) {
         return persistencePort.findById(sucursalId)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.SUCURSAL_NOT_FOUND)))
-                .flatMap(sucursal -> persistencePort.updateNombre(sucursalId, nuevoNombre));
+                .flatMap(sucursal -> persistencePort.existsByFranquiciaIdAndNombre(sucursal.franquiciaId(), nuevoNombre)
+                        .flatMap(exists -> exists
+                                ? Mono.error(new BusinessException(TechnicalMessage.SUCURSAL_ALREADY_EXISTS))
+                                : persistencePort.updateNombre(sucursalId, nuevoNombre)))
+                .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_UPDATE_NAME));
     }
 
     @Override

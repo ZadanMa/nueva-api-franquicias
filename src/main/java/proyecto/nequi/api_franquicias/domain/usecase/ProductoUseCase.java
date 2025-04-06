@@ -3,6 +3,7 @@ package proyecto.nequi.api_franquicias.domain.usecase;
 import proyecto.nequi.api_franquicias.domain.api.ProductoServicePort;
 import proyecto.nequi.api_franquicias.domain.enums.TechnicalMessage;
 import proyecto.nequi.api_franquicias.domain.exceptions.BusinessException;
+import proyecto.nequi.api_franquicias.domain.exceptions.TechnicalException;
 import proyecto.nequi.api_franquicias.domain.model.Producto;
 import proyecto.nequi.api_franquicias.domain.spi.ProductoPersistencePort;
 import reactor.core.publisher.Flux;
@@ -18,7 +19,11 @@ public class ProductoUseCase implements ProductoServicePort {
 
     @Override
     public Mono<Producto> registrarProducto(Producto producto) {
-        return persistencePort.save(producto);
+        return persistencePort.existsBySucursalIdAndNombre(producto.sucursalId(), producto.nombre())
+                .flatMap(exists -> exists
+                        ? Mono.error(new BusinessException(TechnicalMessage.PRODUCT_ALREADY_EXISTS))
+                        : persistencePort.save(producto))
+                .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_SAVE_ENTITY));
     }
 
     @Override
@@ -41,17 +46,18 @@ public class ProductoUseCase implements ProductoServicePort {
     public Mono<Producto> actualizarNombreProducto(Long productoId, String nuevoNombre) {
         return persistencePort.findById(productoId)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND)))
-                .flatMap(existing -> {
-                    Producto updated = new Producto(
-                            existing.id(),
-                            nuevoNombre,
-                            existing.stock(),
-                            existing.sucursalId()
-                    );
-                    return persistencePort.updateNombre(productoId, nuevoNombre).thenReturn(updated);
-            });
+                .flatMap(existing -> persistencePort.existsBySucursalIdAndNombre(existing.sucursalId(), nuevoNombre)
+                        .flatMap(exists -> exists
+                                ? Mono.error(new BusinessException(TechnicalMessage.PRODUCT_ALREADY_EXISTS))
+                                : persistencePort.updateNombre(productoId, nuevoNombre)
+                                .thenReturn(new Producto(
+                                        existing.id(),
+                                        nuevoNombre,
+                                        existing.stock(),
+                                        existing.sucursalId()
+                                ))))
+                .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_UPDATE_NAME));
     }
-
     @Override
     public Mono<Producto> modificarStockProducto(Long productoId, int nuevoStock) {
         return persistencePort.findById(productoId)
