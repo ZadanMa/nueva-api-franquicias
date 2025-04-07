@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.4.4'
     id 'io.spring.dependency-management' version '1.1.7'
+    id "org.sonarqube" version "4.4.1.3373"
+    id "jacoco"
 }
 
 group = 'proyecto.nequi'
@@ -45,9 +47,36 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-api:2.8.6'
 
     testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'org.mockito:mockito-core'
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:r2dbc'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "api-franquicias-nequi"
+        property "sonar.host.url", "http://localhost:9000"
+        property "sonar.login", System.getenv("SONAR_TOKEN")
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.10"
+    reportsDirectory = file("$buildDir/reports/jacoco")
+}
+
+test {
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {

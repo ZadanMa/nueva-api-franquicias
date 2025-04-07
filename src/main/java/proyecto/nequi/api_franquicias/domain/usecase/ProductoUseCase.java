@@ -34,7 +34,8 @@ public class ProductoUseCase implements ProductoServicePort {
     @Override
     public Mono<Producto> getProductoById(Long productoId) {
         return persistencePort.findById(productoId)
-                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND)));
+                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND)))
+                .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_RETRIEVE_ENTITY));
     }
 
     @Override

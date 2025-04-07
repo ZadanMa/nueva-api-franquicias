@@ -72,7 +72,7 @@ public class FranquiciaRouter {
         return route()
                 .POST("/franquicias", handler::registerFranquicia)
                 .PUT("/franquicias/{id}", handler::updateFranquiciaName)
-                //.GET("/franquicias/{id}/full", handler::getFranquiciaWithDetails)
+                .GET("/franquicias/{id}/full", handler::getFranquiciaWithDetails)
                 .build();
     }
 }

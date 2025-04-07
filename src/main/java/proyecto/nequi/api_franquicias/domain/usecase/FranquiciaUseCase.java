@@ -1,21 +1,16 @@
 package proyecto.nequi.api_franquicias.domain.usecase;
 
-import io.r2dbc.spi.R2dbcException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import proyecto.nequi.api_franquicias.domain.api.FranquiciaServicePort;
 import proyecto.nequi.api_franquicias.domain.enums.TechnicalMessage;
 import proyecto.nequi.api_franquicias.domain.exceptions.BusinessException;
 import proyecto.nequi.api_franquicias.domain.exceptions.TechnicalException;
 import proyecto.nequi.api_franquicias.domain.model.Franquicia;
-import proyecto.nequi.api_franquicias.domain.model.FranquiciaWithDetails;
 import proyecto.nequi.api_franquicias.domain.spi.FranquiciaPersistencePort;
 import reactor.core.publisher.Mono;
 
 
 public class FranquiciaUseCase implements FranquiciaServicePort {
 
-    private final Logger log = LoggerFactory.getLogger(FranquiciaUseCase.class);
     private final FranquiciaPersistencePort persistencePort;
 
     public FranquiciaUseCase(FranquiciaPersistencePort persistencePort) {

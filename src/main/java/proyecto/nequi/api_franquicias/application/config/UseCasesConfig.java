@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import proyecto.nequi.api_franquicias.domain.api.FranquiciaServicePort;
+import proyecto.nequi.api_franquicias.domain.api.OptionalServicePort;
 import proyecto.nequi.api_franquicias.domain.api.SucursalServicePort;
 import proyecto.nequi.api_franquicias.domain.api.ProductoServicePort;
+import proyecto.nequi.api_franquicias.domain.spi.FranquicePersistencePorts;
 import proyecto.nequi.api_franquicias.domain.spi.FranquiciaPersistencePort;
 import proyecto.nequi.api_franquicias.domain.spi.SucursalPersistencePort;
 import proyecto.nequi.api_franquicias.domain.spi.ProductoPersistencePort;
 import proyecto.nequi.api_franquicias.domain.usecase.FranquiciaUseCase;
+import proyecto.nequi.api_franquicias.domain.usecase.OptionalUseCase;
 import proyecto.nequi.api_franquicias.domain.usecase.SucursalUseCase;
 import proyecto.nequi.api_franquicias.domain.usecase.ProductoUseCase;
 
@@ -30,5 +33,9 @@ public class UseCasesConfig {
     @Bean
     public ProductoServicePort productoServicePort(ProductoPersistencePort productoPersistencePort) {
         return new ProductoUseCase(productoPersistencePort);
+    }
+    @Bean
+    public OptionalServicePort optionalServicePort(FranquicePersistencePorts optionalServicePort) {
+        return new OptionalUseCase(optionalServicePort);
     }
 }

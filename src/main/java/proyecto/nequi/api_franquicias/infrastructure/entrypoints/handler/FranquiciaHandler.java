@@ -8,12 +8,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import proyecto.nequi.api_franquicias.domain.api.FranquiciaServicePort;
+import proyecto.nequi.api_franquicias.domain.api.OptionalServicePort;
 import proyecto.nequi.api_franquicias.domain.enums.TechnicalMessage;
 import proyecto.nequi.api_franquicias.domain.exceptions.BusinessException;
 import proyecto.nequi.api_franquicias.domain.exceptions.TechnicalException;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.FranquiciaDTO;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.FranquiciaUpdateDTO;
+import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.FranquiciaWithDetailsDTO;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.mapper.FranquiciaDTOMapper;
+import proyecto.nequi.api_franquicias.infrastructure.entrypoints.mapper.FranquiciaWithDetailsDTOMapper;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.util.APIResponse;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.util.ErrorDTO;
 import reactor.core.publisher.Mono;
@@ -27,13 +30,18 @@ public class FranquiciaHandler {
     private static Logger log = LoggerFactory.getLogger(FranquiciaHandler.class);
 
     private final FranquiciaServicePort servicePort;
+    private final OptionalServicePort optionalServicePort;
     private final FranquiciaDTOMapper dtoMapper;
+    private final FranquiciaWithDetailsDTOMapper detailsMapper;
 
     public FranquiciaHandler(
             FranquiciaServicePort servicePort,
-            FranquiciaDTOMapper dtoMapper) {
+            OptionalServicePort optionalServicePort,
+            FranquiciaDTOMapper dtoMapper, FranquiciaWithDetailsDTOMapper detailsMapper) {
         this.servicePort = servicePort;
+        this.optionalServicePort = optionalServicePort;
         this.dtoMapper = dtoMapper;
+        this.detailsMapper = detailsMapper;
 
     }
 
@@ -99,28 +107,28 @@ public class FranquiciaHandler {
                 ));
     }
 
-//    public Mono<ServerResponse> getFranquiciaWithDetails(ServerRequest request) {
-//        Long id = Long.valueOf(request.pathVariable("id"));
-//        return servicePort.getFranquiciaWithDetails(id)
-//                .map(detailsMapper::toDto)
-//                .flatMap(dto -> ServerResponse.ok()
-//                        .bodyValue(APIResponse.<FranquiciaWithDetailsDTO>builder()
-//                                .code(TechnicalMessage.FRANQUICIA_FOUND.getCode())
-//                                .message(TechnicalMessage.FRANQUICIA_FOUND.getMessage())
-//                                .data(dto)
-//                                .build()
-//                        ))
-//                .onErrorResume(BusinessException.class, ex -> ServerResponse.status(HttpStatus.NOT_FOUND)
-//                        .bodyValue(APIResponse.builder()
-//                                .code(ex.getTechnicalMessage().getCode())
-//                                .message(ex.getTechnicalMessage().getMessage())
-//                                .build()
-//                        ))
-//                .onErrorResume(TechnicalException.class, ex -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                        .bodyValue(APIResponse.builder()
-//                                .code(ex.getTechnicalMessage().getCode())
-//                                .message(ex.getTechnicalMessage().getMessage())
-//                                .build()
-//                        ));
-//    }
+    public Mono<ServerResponse> getFranquiciaWithDetails(ServerRequest request) {
+        Long id = Long.valueOf(request.pathVariable("id"));
+        return optionalServicePort.getFranquiciaWithDetails(id)
+                .map(detailsMapper::toDto)
+                .flatMap(dto -> ServerResponse.ok()
+                        .bodyValue(APIResponse.<FranquiciaWithDetailsDTO>builder()
+                                .code(TechnicalMessage.FRANQUICIA_FOUND.getCode())
+                                .message(TechnicalMessage.FRANQUICIA_FOUND.getMessage())
+                                .data(dto)
+                                .build()
+                        ))
+                .onErrorResume(BusinessException.class, ex -> ServerResponse.status(HttpStatus.NOT_FOUND)
+                        .bodyValue(APIResponse.builder()
+                                .code(ex.getTechnicalMessage().getCode())
+                                .message(ex.getTechnicalMessage().getMessage())
+                                .build()
+                        ))
+                .onErrorResume(TechnicalException.class, ex -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .bodyValue(APIResponse.builder()
+                                .code(ex.getTechnicalMessage().getCode())
+                                .message(ex.getTechnicalMessage().getMessage())
+                                .build()
+                        ));
+    }
 }
