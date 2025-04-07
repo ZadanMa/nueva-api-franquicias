@@ -7,9 +7,8 @@ resource "aws_db_subnet_group" "franquicias_subnet_group" {
   }
 }
 
-# Instancia RDS MySQL
 resource "aws_db_instance" "franquicias" {
-  identifier             = "franquicias-db"
+  identifier             = "franquiciasdb"
   engine                 = "mysql"
   engine_version         = "8.0"
   instance_class         = "db.t3.micro"
@@ -19,9 +18,9 @@ resource "aws_db_instance" "franquicias" {
   vpc_security_group_ids = ["sg-0a3c90e0f2308aee7"]
   username               = data.aws_ssm_parameter.db_username.value
   password               = data.aws_ssm_parameter.db_password.value
-  db_name                = "franquicias_db"
+  db_name                = "franquiciasdb"
   port                   = 3306
-  publicly_accessible    = false
+  publicly_accessible    = true
 
   skip_final_snapshot = true
 

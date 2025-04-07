@@ -73,6 +73,7 @@ public class ProductoUseCase implements ProductoServicePort {
                             existing.sucursalId()
                     );
                     return persistencePort.updateStock(productoId, nuevoStock).thenReturn(updated);
-                });
+                })
+                .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_UPDATE_STOCK));
     }
 }

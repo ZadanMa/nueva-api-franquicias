@@ -36,7 +36,8 @@ public class SucursalUseCase implements SucursalServicePort {
     @Override
     public Mono<Sucursal> getSucursalById(Long sucursalId) {
         return persistencePort.findById(sucursalId)
-                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.SUCURSAL_NOT_FOUND)));
+                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.SUCURSAL_NOT_FOUND)))
+                .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_FIND_ENTITY));
     }
 
     @Override

@@ -17,6 +17,7 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.FranquiciaDTO;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.FranquiciaUpdateDTO;
+import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.FranquiciaWithDetailsDTO;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.handler.FranquiciaHandler;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.util.APIResponse;
 
@@ -29,22 +30,35 @@ public class FranquiciaRouter {
     @RouterOperations({
             @RouterOperation(
                     path = "/franquicias",
-                    produces = {
-                            MediaType.APPLICATION_JSON_VALUE
-                    },
                     method = RequestMethod.POST,
                     beanClass = FranquiciaHandler.class,
                     beanMethod = "registerFranquicia",
                     operation = @Operation(
                             summary = "Registrar franquicia",
                             tags = {"Franquicia"},
-                            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = FranquiciaDTO.class))),
+                            requestBody = @RequestBody(
+                                    content = @Content(
+                                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                            schema = @Schema(implementation = FranquiciaDTO.class)
+                                    )
+                            ),
                             responses = {
-                                    @ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = APIResponse.class))),
-                                    @ApiResponse(responseCode = "400", content = @Content(schema = @Schema(implementation = APIResponse.class)))
-                            },
-                            parameters = {
-                                    @Parameter(in = ParameterIn.QUERY, name = "nombre", description = "Nombre de la franquicia")
+                                    @ApiResponse(
+                                            responseCode = "201",
+                                            description = "Franquicia creada",
+                                            content = @Content(
+                                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = APIResponse.class)
+                                            )
+                                    ),
+                                    @ApiResponse(
+                                            responseCode = "400",
+                                            description = "Error de negocio",
+                                            content = @Content(
+                                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = APIResponse.class)
+                                            )
+                                    )
                             }
                     )
             ),
@@ -67,6 +81,24 @@ public class FranquiciaRouter {
                             }
                     )
             ),
+            @RouterOperation(
+                    path = "/franquicias/{id}/full",
+                    produces = {
+                            MediaType.APPLICATION_JSON_VALUE
+                    },
+                    method = RequestMethod.GET,
+                    beanClass = FranquiciaHandler.class,
+                    beanMethod = "getFranquiciaWithDetails",
+                    operation = @Operation(
+                            summary = "Obtener franquicia con detalles",
+                            tags = {"Franquicia"},
+                            parameters = @Parameter(in = ParameterIn.PATH, name = "id", description = "ID de la franquicia"),
+                            responses = {
+                                    @ApiResponse(responseCode = "200", description = "Franquicia encontrada", content = @Content(schema = @Schema(implementation = FranquiciaWithDetailsDTO.class))),
+                                    @ApiResponse(responseCode = "404", description = "Franquicia no encontrada")
+                            }
+                    )
+            )
     })
     public RouterFunction<ServerResponse> franquiciaRoutes(FranquiciaHandler handler) {
         return route()

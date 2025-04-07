@@ -19,6 +19,7 @@ public enum TechnicalMessage {
     PRODUCTO_STOCK_UPDATED("PRDSU-200", "Stock del producto actualizado exitosamente"),
 
 
+    FAILED_TO_FIND_ENTITY("DB-404", "Error al encontrar la entidad"),
     PRODUCTO_STOCK_INVALID("PRDS-400", "El stock del producto no es válido"),
     FRANQUICIA_ALREADY_EXISTS("FRQA-400", "La franquicia ya existe"),
     FRANQUICIA_NAME_FOUND("FRQN-400", "El nombre de la franquicia y esta utilizado"),

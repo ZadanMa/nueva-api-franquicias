@@ -11,6 +11,4 @@ public class ProcessorException extends RuntimeException {
         super(message);
         this.technicalMessage = technicalMessage;
     }
-
-
 }

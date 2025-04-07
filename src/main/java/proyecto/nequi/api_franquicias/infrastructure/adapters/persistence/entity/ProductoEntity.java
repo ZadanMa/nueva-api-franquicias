@@ -2,6 +2,7 @@ package proyecto.nequi.api_franquicias.infrastructure.adapters.persistence.entit
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Data
@@ -11,5 +12,6 @@ public class ProductoEntity {
     private Long id;
     private String nombre;
     private int stock;
+    @Column("sucursal_id")
     private Long sucursalId;
 }

@@ -36,14 +36,4 @@ public class FranquiciaUseCase implements FranquiciaServicePort {
                                 : persistencePort.updateName(id, newName)))
                 .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_UPDATE_NAME));
     }
-
-//    @Override
-//    public Mono<FranquiciaWithDetails> getFranquiciaWithDetails(Long id) {
-//        return persistencePort.findWithDetailsById(id)
-//                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NOT_FOUND)))
-//                .onErrorMap(ex -> {
-//                    log.error("Error técnico al recuperar franquicia: {}", ex.getMessage());
-//                    return new TechnicalException(TechnicalMessage.FAILED_TO_RETRIEVE_ENTITY);
-//                });
-//    }
 }

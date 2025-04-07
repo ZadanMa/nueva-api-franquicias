@@ -8,5 +8,4 @@ import proyecto.nequi.api_franquicias.infrastructure.adapters.persistence.entity
 public interface FranquiciaMapper {
     Franquicia toModel(FranquiciaEntity entity);
     FranquiciaEntity toEntity(Franquicia model);
-
 }
