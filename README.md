@@ -50,56 +50,56 @@ src/
 ```
 ## Este proyecto implementa una arquitectura hexagonal que separa el código en tres capas principales:
 ### 1. Dominio (Centro)
-####El núcleo de la aplicación contiene toda la lógica de negocio y está completamente aislado de las tecnologías externas.
+#### - El núcleo de la aplicación contiene toda la lógica de negocio y está completamente aislado de las tecnologías externas.
 
-#### Modelos: Representan entidades del negocio (Franquicia, Sucursal, Producto).
-#### Puertos Primarios (API): Definen servicios que el dominio ofrece al exterior.
-#### Puertos Secundarios (SPI): Especifican cómo el dominio necesita interactuar con servicios externos.
-#### Casos de uso: Implementan la lógica de negocio utilizando puertos secundarios.
+#### - Modelos: Representan entidades del negocio (Franquicia, Sucursal, Producto).
+#### - Puertos Primarios (API): Definen servicios que el dominio ofrece al exterior.
+#### - Puertos Secundarios (SPI): Especifican cómo el dominio necesita interactuar con servicios externos.
+#### - Casos de uso: Implementan la lógica de negocio utilizando puertos secundarios.
 
 ### 2. Infraestructura (Periferia)
-#### Conecta el dominio con el mundo exterior e implementa los detalles técnicos.
+#### - Conecta el dominio con el mundo exterior e implementa los detalles técnicos.
 
-#### Adaptadores de Entrada: Implementan la API REST mediante handlers y routers.
-#### Adaptadores de Salida: Implementan la persistencia mediante repositorios y entidades.
-#### DTOs y Mappers: Transforman datos entre el formato externo y el dominio.
+#### - Adaptadores de Entrada: Implementan la API REST mediante handlers y routers.
+#### - Adaptadores de Salida: Implementan la persistencia mediante repositorios y entidades.
+#### - DTOs y Mappers: Transforman datos entre el formato externo y el dominio.
 
 ### 3. Aplicación (Configuración)
-### Configura y conecta los componentes del sistema.
+### - Configura y conecta los componentes del sistema.
 
-### Configuración de casos de uso: Inyecta dependencias y conecta adaptadores con puertos.
+### - Configuración de casos de uso: Inyecta dependencias y conecta adaptadores con puertos.
 
 ### Tecnologías Utilizadas
 
-#### Java 17
-#### Spring Boot 3.x
-#### Spring WebFlux: Framework reactivo para APIs web
-#### R2DBC: Acceso reactivo a bases de datos relacionales
-#### MapStruct: Generación automática de código para mapeo de objetos
-#### Lombok: Reducción de código boilerplate
-#### JUnit 5 y Mockito: Testing
-#### OpenAPI/Swagger: Documentación de API
+#### - Java 17
+#### - Spring Boot 3.x
+#### - Spring WebFlux: Framework reactivo para APIs web
+#### - R2DBC: Acceso reactivo a bases de datos relacionales
+#### - MapStruct: Generación automática de código para mapeo de objetos
+#### - Lombok: Reducción de código boilerplate
+#### - JUnit 5 y Mockito: Testing
+#### - OpenAPI/Swagger: Documentación de API
 
 ### Flujo de Peticiones
 
-#### Las peticiones HTTP son recibidas por los Routers
-#### Los Handlers procesan la petición y llaman a los Puertos de Servicio
-#### Los Casos de Uso implementan la lógica de negocio
-#### Los Puertos de Persistencia son utilizados para acceder a datos
-#### Los Adaptadores de Persistencia implementan el acceso a la base de datos
-#### La respuesta fluye de vuelta por el mismo camino
+#### - Las peticiones HTTP son recibidas por los Routers
+#### - Los Handlers procesan la petición y llaman a los Puertos de Servicio
+#### - Los Casos de Uso implementan la lógica de negocio
+#### - Los Puertos de Persistencia son utilizados para acceder a datos
+#### - Los Adaptadores de Persistencia implementan el acceso a la base de datos
+#### - La respuesta fluye de vuelta por el mismo camino
 
 ### Modelo de Datos
-#### El sistema gestiona las siguientes entidades:
+#### - El sistema gestiona las siguientes entidades:
 
-#### Franquicia: Representa una marca o empresa con múltiples sucursales
-#### Sucursal: Establecimiento físico perteneciente a una franquicia
-#### Producto: Artículo o servicio ofrecido en las sucursales
+#### - Franquicia: Representa una marca o empresa con múltiples sucursales
+#### - Sucursal: Establecimiento físico perteneciente a una franquicia
+#### - Producto: Artículo o servicio ofrecido en las sucursales
 
 ### API REST
-#### Endpoints de Franquicias
-#### MétodoURLDescripciónPOST/franquiciasRegistra una nueva franquiciaPUT/franquicias/{id}Actualiza el nombre de una franquiciaGET/franquicias/{id}/fullObtiene una franquicia con detalles completos
-#### Formato de Respuesta
+#### - Endpoints de Franquicias
+#### - MétodoURLDescripciónPOST/franquiciasRegistra una nueva franquiciaPUT/franquicias/{id}Actualiza el nombre de una franquiciaGET/franquicias/{id}/fullObtiene una franquicia con detalles completos
+#### - Formato de Respuesta
 ```bash
 jsonCopiar{
   "code": "string",
@@ -115,10 +115,10 @@ jsonCopiar{
 }
 ```
 ### Manejo de Errores
-#### El sistema diferencia entre dos tipos de errores:
+#### - El sistema diferencia entre dos tipos de errores:
 
-- #### Errores de Negocio (BusinessException): Representan violaciones de reglas de negocio
-- #### Errores Técnicos (TechnicalException): Problemas de infraestructura o técnicos
+- #### - Errores de Negocio (BusinessException): Representan violaciones de reglas de negocio
+- #### - Errores Técnicos (TechnicalException): Problemas de infraestructura o técnicos
 
 ## Requisitos
 
