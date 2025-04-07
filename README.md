@@ -65,9 +65,8 @@ src/
 ####   - DTOs y Mappers: Transforman datos entre el formato externo y el dominio.
 
 ### 3. Aplicación (Configuración)
-###   - Configura y conecta los componentes del sistema.
-
-###   - Configuración de casos de uso: Inyecta dependencias y conecta adaptadores con puertos.
+####   - Configura y conecta los componentes del sistema.
+####   - Configuración de casos de uso: Inyecta dependencias y conecta adaptadores con puertos.
 
 ### 4. Tecnologías Utilizadas
 
