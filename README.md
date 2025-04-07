@@ -69,7 +69,7 @@ src/
 
 ###   - Configuración de casos de uso: Inyecta dependencias y conecta adaptadores con puertos.
 
-### Tecnologías Utilizadas
+### 4. Tecnologías Utilizadas
 
 ####   - Java 17
 ####   - Spring Boot 3.x
@@ -80,7 +80,7 @@ src/
 ####   - JUnit 5 y Mockito: Testing
 ####   - OpenAPI/Swagger: Documentación de API
 
-### Flujo de Peticiones
+### 5. Flujo de Peticiones
 
   #### - Las peticiones HTTP son recibidas por los Routers
   #### - Los Handlers procesan la petición y llaman a los Puertos de Servicio
@@ -89,14 +89,14 @@ src/
   #### - Los Adaptadores de Persistencia implementan el acceso a la base de datos
   #### - La respuesta fluye de vuelta por el mismo camino
 
-### Modelo de Datos
+### 6. Modelo de Datos
   #### - El sistema gestiona las siguientes entidades:
   
   #### - Franquicia: Representa una marca o empresa con múltiples sucursales
   #### - Sucursal: Establecimiento físico perteneciente a una franquicia
   #### - Producto: Artículo o servicio ofrecido en las sucursales
 
-### API REST
+### 7. API REST
   #### - Endpoints de Franquicias
   #### - MétodoURLDescripciónPOST/franquiciasRegistra una nueva franquiciaPUT/franquicias/{id}Actualiza el nombre de una franquiciaGET/franquicias/{id}/fullObtiene una franquicia con detalles completos
   #### - Formato de Respuesta
@@ -114,7 +114,7 @@ jsonCopiar{
   ]
 }
 ```
-### Manejo de Errores
+### 8. Manejo de Errores
   #### - El sistema diferencia entre dos tipos de errores:
   
   - #### - Errores de Negocio (BusinessException): Representan violaciones de reglas de negocio
