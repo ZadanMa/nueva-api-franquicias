@@ -96,8 +96,6 @@ src/
   #### - Producto: Artículo o servicio ofrecido en las sucursales
 
 ### 7. API REST
-  #### - Endpoints de Franquicias
-  #### - MétodoURLDescripciónPOST/franquiciasRegistra una nueva franquiciaPUT/franquicias/{id}Actualiza el nombre de una franquiciaGET/franquicias/{id}/fullObtiene una franquicia con detalles completos
   #### - Formato de Respuesta
 ```bash
 jsonCopiar{
