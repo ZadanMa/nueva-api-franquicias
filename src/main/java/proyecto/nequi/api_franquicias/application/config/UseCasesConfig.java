@@ -3,39 +3,39 @@ package proyecto.nequi.api_franquicias.application.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import proyecto.nequi.api_franquicias.domain.api.FranquiciaServicePort;
+import proyecto.nequi.api_franquicias.domain.api.FranchiseServicePort;
 import proyecto.nequi.api_franquicias.domain.api.OptionalServicePort;
-import proyecto.nequi.api_franquicias.domain.api.SucursalServicePort;
-import proyecto.nequi.api_franquicias.domain.api.ProductoServicePort;
-import proyecto.nequi.api_franquicias.domain.spi.FranquicePersistencePorts;
-import proyecto.nequi.api_franquicias.domain.spi.FranquiciaPersistencePort;
-import proyecto.nequi.api_franquicias.domain.spi.SucursalPersistencePort;
-import proyecto.nequi.api_franquicias.domain.spi.ProductoPersistencePort;
-import proyecto.nequi.api_franquicias.domain.usecase.FranquiciaUseCase;
+import proyecto.nequi.api_franquicias.domain.api.BranchServicePort;
+import proyecto.nequi.api_franquicias.domain.api.ProductServicePort;
+import proyecto.nequi.api_franquicias.domain.spi.FranchisePersistencePorts;
+import proyecto.nequi.api_franquicias.domain.spi.FranchisePersistencePort;
+import proyecto.nequi.api_franquicias.domain.spi.BranchPersistencePort;
+import proyecto.nequi.api_franquicias.domain.spi.ProductPersistencePort;
+import proyecto.nequi.api_franquicias.domain.usecase.FranchiseUseCase;
 import proyecto.nequi.api_franquicias.domain.usecase.OptionalUseCase;
-import proyecto.nequi.api_franquicias.domain.usecase.SucursalUseCase;
-import proyecto.nequi.api_franquicias.domain.usecase.ProductoUseCase;
+import proyecto.nequi.api_franquicias.domain.usecase.BranchUseCase;
+import proyecto.nequi.api_franquicias.domain.usecase.ProductUseCase;
 
 @Configuration
 @RequiredArgsConstructor
 public class UseCasesConfig {
 
     @Bean
-    public FranquiciaServicePort franquiciaServicePort(FranquiciaPersistencePort franquiciaPersistencePort) {
-        return new FranquiciaUseCase(franquiciaPersistencePort);
+    public FranchiseServicePort franquiciaServicePort(FranchisePersistencePort franchisePersistencePort) {
+        return new FranchiseUseCase(franchisePersistencePort);
     }
 
     @Bean
-    public SucursalServicePort sucursalServicePort(SucursalPersistencePort sucursalPersistencePort) {
-        return new SucursalUseCase(sucursalPersistencePort);
+    public BranchServicePort sucursalServicePort(BranchPersistencePort branchPersistencePort) {
+        return new BranchUseCase(branchPersistencePort);
     }
 
     @Bean
-    public ProductoServicePort productoServicePort(ProductoPersistencePort productoPersistencePort) {
-        return new ProductoUseCase(productoPersistencePort);
+    public ProductServicePort productoServicePort(ProductPersistencePort productPersistencePort) {
+        return new ProductUseCase(productPersistencePort);
     }
     @Bean
-    public OptionalServicePort optionalServicePort(FranquicePersistencePorts optionalServicePort) {
+    public OptionalServicePort optionalServicePort(FranchisePersistencePorts optionalServicePort) {
         return new OptionalUseCase(optionalServicePort);
     }
 }

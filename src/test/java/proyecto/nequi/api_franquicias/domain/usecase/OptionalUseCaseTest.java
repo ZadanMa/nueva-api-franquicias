@@ -6,8 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import proyecto.nequi.api_franquicias.domain.exceptions.TechnicalException;
-import proyecto.nequi.api_franquicias.domain.model.FranquiciaWithDetails;
-import proyecto.nequi.api_franquicias.domain.spi.FranquicePersistencePorts;
+import proyecto.nequi.api_franquicias.domain.model.FranchiseWithDetails;
+import proyecto.nequi.api_franquicias.domain.spi.FranchisePersistencePorts;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import java.util.List;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 class OptionalUseCaseTest {
 
     @Mock
-    private FranquicePersistencePorts persistencePort;
+    private FranchisePersistencePorts persistencePort;
 
     private OptionalUseCase optionalUseCase;
 
@@ -28,20 +28,20 @@ class OptionalUseCaseTest {
     }
 
     @Test
-    void testGetFranquiciaWithDetails_Success() {
-        FranquiciaWithDetails franquicia = new FranquiciaWithDetails(1L, "Burger King", List.of());
+    void testGetFranchiseWithDetails_Success() {
+        FranchiseWithDetails franquicia = new FranchiseWithDetails(1L, "Burger King", List.of());
         when(persistencePort.findWithDetailsById(1L)).thenReturn(Mono.just(franquicia));
 
-        StepVerifier.create(optionalUseCase.getFranquiciaWithDetails(1L))
+        StepVerifier.create(optionalUseCase.getFranchiseWithDetails(1L))
                 .expectNext(franquicia)
                 .verifyComplete();
     }
 
     @Test
-    void testGetFranquiciaWithDetails_TechnicalError() {
+    void testGetFranchiseWithDetails_TechnicalError() {
         when(persistencePort.findWithDetailsById(1L)).thenReturn(Mono.error(new RuntimeException()));
 
-        StepVerifier.create(optionalUseCase.getFranquiciaWithDetails(1L))
+        StepVerifier.create(optionalUseCase.getFranchiseWithDetails(1L))
                 .expectError(TechnicalException.class)
                 .verify();
     }

@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS sucursales (
     franquicia_id BIGINT NOT NULL
     );
 
-CREATE TABLE IF NOT EXISTS productos (
+CREATE TABLE IF NOT EXISTS products (
                                          id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                          nombre VARCHAR(255) NOT NULL,
     stock INT NOT NULL CHECK (stock >= 0),

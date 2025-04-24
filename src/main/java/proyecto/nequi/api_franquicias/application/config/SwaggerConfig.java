@@ -15,13 +15,13 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("API Franquicias Nequi")
                         .version("1.0")
-                        .description("API para gestión de franquicias, sucursales y productos"));
+                        .description("API para gestión de franquicias, branchFull y products"));
     }
     @Bean
     public GroupedOpenApi api() {
         return GroupedOpenApi.builder()
                 .group("api-franquicias")
-                .pathsToMatch("/franquicias/**", "/sucursales/**", "/productos/**")
+                .pathsToMatch("/franquicias/**", "/branchFull/**", "/products/**")
                 .build();
     }
 }

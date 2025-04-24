@@ -1,6 +1,6 @@
 # API Franquicias - Aplicación Reactiva con Spring Boot, WebFlux y MongoDB
 
-Esta aplicación es una API para manejar una lista de franquicias, donde cada franquicia tiene un nombre y una lista de sucursales. Cada sucursal tiene un nombre y una lista de productos, y cada producto se define por su nombre y cantidad de stock. La aplicación está desarrollada con Spring Boot, WebFlux y MongoDB en modo reactivo, utilizando un enfoque basado en Router/Handler para aprovechar al máximo la programación funcional y no bloqueante.
+Esta aplicación es una API para manejar una lista de franquicias, donde cada franchise tiene un nombre y una lista de sucursales. Cada branch tiene un nombre y una lista de products, y cada product se define por su nombre y cantidad de stock. La aplicación está desarrollada con Spring Boot, WebFlux y MongoDB en modo reactivo, utilizando un enfoque basado en Router/Handler para aprovechar al máximo la programación funcional y no bloqueante.
 El api esta en fase de desarrollo, para acceder a la api, debe dirigirse a la rama dev.
 
 ## Tabla de Contenidos
@@ -20,7 +20,7 @@ El api esta en fase de desarrollo, para acceder a la api, debe dirigirse a la ra
 - **Programación Reactiva:** Utiliza Spring WebFlux y el driver reactivo de R2DBC para operaciones no bloqueantes.
 - ** Arquitectura hexagonal para separación clara de responsabilidades
 - ** Manejo estructurado de errore
-- ** Endpoints Compuestos:** Incluye endpoints para asociar sucursales y productos a franquicias existentes.
+- ** Endpoints Compuestos:** Incluye endpoints para asociar sucursales y products a franquicias existentes.
 - ** Dockerizado:** La aplicación se empaqueta en una imagen Docker ligera basada en JDK 17 Alpine.
 - ** Formato de respuesta estandarizado
 
@@ -92,7 +92,7 @@ src/
   #### - El sistema gestiona las siguientes entidades:
   
   #### - Franquicia: Representa una marca o empresa con múltiples sucursales
-  #### - Sucursal: Establecimiento físico perteneciente a una franquicia
+  #### - Sucursal: Establecimiento físico perteneciente a una franchise
   #### - Producto: Artículo o servicio ofrecido en las sucursales
 
 ### 7. API REST
@@ -153,41 +153,41 @@ docker run -p 8080:8080 --name api-franquicias api-franquicias
 ## Endpoints Principales
 ### Franquicias
 
-- POST /franquicias - Registrar una franquicia
+- POST /franquicias - Registrar una franchise
 
-- PUT /franquicias/{franquiciaId} - Actualizar nombre de una franquicia
+- PUT /franquicias/{franquiciaId} - Actualizar nombre de una franchise
 
-- GET /franquicias/{franquiciaId}/full - Obtener información completa de una franquicia
+- GET /franquicias/{franquiciaId}/full - Obtener información completa de una franchise
 
 ### Sucursales
 
-- POST /api/franquicias/{franquiciaId}/sucursales - Agregar una nueva sucursal a una franquicia
+- POST /api/franquicias/{franquiciaId}/sucursales - Agregar una nueva branch a una franchise
   
 - GET /api/franquicias/sucursales - Obtener todas las sucursales
 
-- GET /api/franquicias/sucursales/{sucursalId} - Obtener una sucursal por ID
+- GET /api/franquicias/sucursales/{sucursalId} - Obtener una branch por ID
 
-- PUT /api/franquicias/sucursales/{sucursalId} - Actualizar el nombre de una sucursal
+- PUT /api/franquicias/sucursales/{sucursalId} - Actualizar el nombre de una branch
 
-- GET /franquicias/{franquiciaId}/productos-mas-stock - Obtener el producto con más stock en una sucursal de la franquicia
+- GET /franquicias/{franquiciaId}/products-mas-stock - Obtener el product con más stock en una branch de la franchise
 
 
 ### Productos
-- POST /api/franquicias/sucursales/{sucursalId}/productos - Agregar un producto a una sucursal
+- POST /api/franquicias/sucursales/{sucursalId}/products - Agregar un product a una branch
 
-- POST /api/franquicias/productos - Registrar un nuevo producto
+- POST /api/franquicias/products - Registrar un nuevo product
 
-- PUT /api/franquicias/sucursales/{sucursalId}/productos/asociar/{productoId} - Asociar un producto a una sucursal
+- PUT /api/franquicias/sucursales/{sucursalId}/products/asociar/{productoId} - Asociar un product a una branch
 
-- GET /api/franquicias/productos - Obtener todos los productos
+- GET /api/franquicias/products - Obtener todos los products
 
-- GET /api/franquicias/productos/{productoId} - Obtener un producto por ID
+- GET /api/franquicias/products/{productoId} - Obtener un product por ID
 
-- DELETE /api/franquicias/sucursales/{sucursalId}/productos/{productoId} - Eliminar un producto de una sucursal
+- DELETE /api/franquicias/sucursales/{sucursalId}/products/{productoId} - Eliminar un product de una branch
 
-- PUT /api/franquicias/productos/{productoId}/stock - Actualizar stock de un producto
+- PUT /api/franquicias/products/{productoId}/stock - Actualizar stock de un product
 
-- PUT /api/franquicias/productos/{productoId}/nombre - Actualizar nombre de un producto
+- PUT /api/franquicias/products/{productoId}/nombre - Actualizar nombre de un product
 
 
 
