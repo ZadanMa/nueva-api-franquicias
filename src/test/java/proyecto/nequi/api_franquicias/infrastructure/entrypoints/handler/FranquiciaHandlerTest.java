@@ -283,4 +283,46 @@ class FranquiciaHandlerTest {
                 .expectNextMatches(response -> response.statusCode().is2xxSuccessful())
                 .verifyComplete();
     }
+
+    @Test
+    void deleteFranquicia_Success() {
+        Long franquiciaId = 1L;
+        when(franquiciaServicePort.deleteFranquicia(franquiciaId)).thenReturn(Mono.empty());
+
+        webTestClient.delete()
+                .uri("/franquicias/{id}", franquiciaId)
+                .exchange()
+                .expectStatus().isNoContent();
+    }
+    @Test
+    void deleteFranquicia_NotFound() {
+        Long franquiciaId = 999L;
+
+        when(franquiciaServicePort.deleteFranquicia(franquiciaId))
+                .thenReturn(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NOT_FOUND)));
+
+        webTestClient.delete()
+                .uri("/franquicias/{id}", franquiciaId)
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody()
+                .jsonPath("$.code").isEqualTo(TechnicalMessage.FRANQUICIA_NOT_FOUND.getCode())
+                .jsonPath("$.message").isEqualTo(TechnicalMessage.FRANQUICIA_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void deleteFranquicia_TechnicalError() {
+        Long franquiciaId = 1L;
+
+        when(franquiciaServicePort.deleteFranquicia(franquiciaId))
+                .thenReturn(Mono.error(new TechnicalException(TechnicalMessage.INTERNAL_SERVER_ERROR)));
+
+        webTestClient.delete()
+                .uri("/franquicias/{id}", franquiciaId)
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+                .expectBody()
+                .jsonPath("$.code").isEqualTo(TechnicalMessage.INTERNAL_SERVER_ERROR.getCode())
+                .jsonPath("$.message").isEqualTo(TechnicalMessage.INTERNAL_SERVER_ERROR.getMessage());
+    }
 }

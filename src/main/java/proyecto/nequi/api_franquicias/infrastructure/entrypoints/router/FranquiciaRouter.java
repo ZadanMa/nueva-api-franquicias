@@ -98,6 +98,24 @@ public class FranquiciaRouter {
                                     @ApiResponse(responseCode = "404", description = "Franquicia no encontrada")
                             }
                     )
+            ),
+            @RouterOperation(
+                    path = "/franquicias/{id}",
+                    produces = {
+                            MediaType.APPLICATION_JSON_VALUE
+                    },
+                    method = RequestMethod.DELETE,
+                    beanClass = FranquiciaHandler.class,
+                    beanMethod = "deleteFranquicia",
+                    operation = @Operation(
+                            summary = "Eliminar franquicia",
+                            tags = {"Franquicia"},
+                            parameters = @Parameter(in = ParameterIn.PATH, name = "id", description = "ID de la franquicia"),
+                            responses = {
+                                    @ApiResponse(responseCode = "200", description = "Franquicia eliminada", content = @Content(schema = @Schema(implementation = APIResponse.class))),
+                                    @ApiResponse(responseCode = "404", description = "Franquicia no encontrada")
+                            }
+                    )
             )
     })
     public RouterFunction<ServerResponse> franquiciaRoutes(FranquiciaHandler handler) {
@@ -105,6 +123,7 @@ public class FranquiciaRouter {
                 .POST("/franquicias", handler::registerFranquicia)
                 .PUT("/franquicias/{id}", handler::updateFranquiciaName)
                 .GET("/franquicias/{id}/full", handler::getFranquiciaWithDetails)
+                .DELETE("/franquicias/{id}", handler::deleteFranquicia)
                 .build();
     }
 }

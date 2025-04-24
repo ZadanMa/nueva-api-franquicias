@@ -44,7 +44,12 @@ public class ProductoPersistenceAdapter implements ProductoPersistencePort {
 
     @Override
     public Mono<Producto> updateStock(Long productoId, int nuevoStock) {
-        return repository.updateStock(productoId, nuevoStock);
+        return repository.findById(productoId)
+                .flatMap(entity -> {
+                    entity.setStock(nuevoStock);
+                    return repository.save(entity);
+                })
+                .map(mapper::toModel);
     }
 
 
@@ -56,6 +61,11 @@ public class ProductoPersistenceAdapter implements ProductoPersistencePort {
 
     @Override
     public Mono<Producto> updateNombre(Long productoId, String nuevoNombre) {
-        return repository.updateNombre(productoId, nuevoNombre);
+        return repository.findById(productoId)
+                .flatMap(entity -> {
+                    entity.setNombre(nuevoNombre);
+                    return repository.save(entity);
+                })
+                .map(mapper::toModel);
     }
 }

@@ -40,7 +40,11 @@ public class ProductoUseCase implements ProductoServicePort {
 
     @Override
     public Mono<Void> eliminarProducto(Long productoId) {
-        return persistencePort.deleteById(productoId);
+
+        return persistencePort.findById(productoId)
+                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND)))
+                .flatMap(existing -> persistencePort.deleteById(productoId))
+                .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_DELETE_ENTITY));
     }
 
     @Override

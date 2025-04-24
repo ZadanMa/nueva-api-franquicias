@@ -107,7 +107,7 @@ public class ProductoHandler {
                         .message(TechnicalMessage.PRODUCTO_DELETED.getMessage())
                         .build()
                 )
-                .flatMap(response -> ServerResponse.ok().bodyValue(response)) // 200 con mensaje
+                .flatMap(response -> ServerResponse.ok().bodyValue(response))
                 .onErrorResume(BusinessException.class, ex -> ServerResponse.badRequest().bodyValue(
                         APIResponse.builder()
                                 .code(ex.getTechnicalMessage().getCode())

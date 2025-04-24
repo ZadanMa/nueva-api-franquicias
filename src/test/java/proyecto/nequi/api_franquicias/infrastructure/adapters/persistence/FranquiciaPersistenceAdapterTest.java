@@ -85,5 +85,27 @@ class FranquiciaPersistenceAdapterTest {
                 .expectNext(updatedModel)
                 .verifyComplete();
     }
+    @Test
+    void testUpdateName_NotFound() {
+        Long id = 999L;
+        String newName = "Burger Queen";
+
+        when(repository.findById(id)).thenReturn(Mono.empty());
+
+        StepVerifier.create(adapter.updateName(id, newName))
+                .expectNextCount(0)
+                .verifyComplete();
+    }
+
+    @Test
+    void testDeleteById_NotFound() {
+        Long id = 999L;
+
+        when(repository.findById(id)).thenReturn(Mono.empty());
+
+        StepVerifier.create(adapter.deleteById(id))
+                .expectNextCount(0)
+                .verifyComplete();
+    }
 
 }

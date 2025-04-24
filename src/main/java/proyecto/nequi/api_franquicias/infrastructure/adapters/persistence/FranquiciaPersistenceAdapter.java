@@ -38,8 +38,6 @@ public class FranquiciaPersistenceAdapter implements FranquiciaPersistencePort {
                 .map(mapper::toModel);
     }
 
-
-
     @Override
     public Mono<Franquicia> updateName(Long id, String newName) {
         return repository.findById(id)
@@ -48,6 +46,11 @@ public class FranquiciaPersistenceAdapter implements FranquiciaPersistencePort {
                     return repository.save(entity);
                 })
                 .map(mapper::toModel);
+    }
+
+    @Override
+    public Mono<Void> deleteById(Long id) {
+        return repository.deleteById(id);
     }
 
 }

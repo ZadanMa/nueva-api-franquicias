@@ -36,4 +36,11 @@ public class FranquiciaUseCase implements FranquiciaServicePort {
                                 : persistencePort.updateName(id, newName)))
                 .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_UPDATE_NAME));
     }
+    @Override
+    public Mono<Void> deleteFranquicia(Long id) {
+        return persistencePort.findById(id)
+                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NOT_FOUND)))
+                .flatMap(existing -> persistencePort.deleteById(id))
+                .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_DELETE_ENTITY));
+    }
 }

@@ -83,4 +83,27 @@ class FranquiciaUseCaseTest {
                 .expectError(TechnicalException.class)
                 .verify();
     }
+
+    @Test
+    void testDeleteFranquicia_FranquiciaNotFound() {
+        Long franquiciaId = 999L;
+
+        when(persistencePort.findById(franquiciaId)).thenReturn(Mono.empty());
+
+        StepVerifier.create(franquiciaUseCase.deleteFranquicia(franquiciaId))
+                .expectError(BusinessException.class)
+                .verify();
+    }
+    @Test
+    void testDeleteFranquicia_TechnicalError() {
+        Long franquiciaId = 1L;
+        Franquicia existing = new Franquicia(franquiciaId, "Burger King");
+
+        when(persistencePort.findById(franquiciaId)).thenReturn(Mono.just(existing));
+        when(persistencePort.deleteById(franquiciaId)).thenReturn(Mono.error(new RuntimeException("Error de BD")));
+
+        StepVerifier.create(franquiciaUseCase.deleteFranquicia(franquiciaId))
+                .expectError(TechnicalException.class)
+                .verify();
+    }
 }

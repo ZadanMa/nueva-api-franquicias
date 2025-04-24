@@ -1,0 +1,13 @@
+spring:
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/franquicias?serverTimezone=America/Bogota
+    username: root
+    password: root
+
+logging:
+  level:
+    org.springframework.cloud.aws: ERROR
+    com.amazonaws: ERROR
+    org.springframework.web: INFO
+    root: INFO
+    io.asyncer.r2dbc.mysql: WARN 

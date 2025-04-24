@@ -131,4 +131,27 @@ public class FranquiciaHandler {
                                 .build()
                         ));
     }
+
+    public Mono<ServerResponse> deleteFranquicia(ServerRequest request) {
+        Long id = Long.valueOf(request.pathVariable("id"));
+        return servicePort.deleteFranquicia(id)
+                .thenReturn(APIResponse.builder()
+                        .code(TechnicalMessage.FRANQUICIA_DELETED.getCode())
+                        .message(TechnicalMessage.FRANQUICIA_DELETED.getMessage())
+                        .build()
+                )
+                .flatMap(response -> ServerResponse.ok().bodyValue(response))
+                .onErrorResume(BusinessException.class, ex -> ServerResponse.status(HttpStatus.NOT_FOUND)
+                        .bodyValue(APIResponse.builder()
+                                .code(ex.getTechnicalMessage().getCode())
+                                .message(ex.getTechnicalMessage().getMessage())
+                                .build()
+                        ))
+                .onErrorResume(TechnicalException.class, ex -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .bodyValue(APIResponse.builder()
+                                .code(ex.getTechnicalMessage().getCode())
+                                .message(ex.getTechnicalMessage().getMessage())
+                                .build()
+                        ));
+    }
 }

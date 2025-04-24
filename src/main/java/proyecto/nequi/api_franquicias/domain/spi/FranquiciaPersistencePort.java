@@ -11,5 +11,5 @@ public interface FranquiciaPersistencePort {
     Mono<Boolean> existsByName(String nombre);
     Mono<Franquicia> findById(Long id);
     Mono<Franquicia> updateName(Long id, String newName);
-//    Mono<FranquiciaWithDetails> findWithDetailsById(Long id);
+    Mono<Void> deleteById(Long id);
 }
