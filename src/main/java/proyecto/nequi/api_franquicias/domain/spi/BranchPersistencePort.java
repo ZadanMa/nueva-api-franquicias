@@ -8,9 +8,9 @@ import java.util.Map;
 
 public interface BranchPersistencePort {
     Mono<Branch> save(Branch branch);
-    Mono<Boolean> existsByFranquiciaIdAndNombre(Long franquiciaId, String nombre);
-    Mono<Branch> findById(Long sucursalId);
-    Mono<Branch> updateNombre(Long sucursalId, String nuevoNombre);
+    Mono<Boolean> existsByFranchiseIdAndName(Long franchiseId, String name);
+    Mono<Branch> findById(Long branchId);
+    Mono<Branch> updateNombre(Long branchId, String newName);
     Flux<Branch> findAll();
-    Flux<Map<String, Object>> productMostStockPerBranch(Long franquiciaId);
+    Flux<Map<String, Object>> productMostStockPerBranch(Long franchiseId);
 }

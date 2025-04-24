@@ -21,17 +21,17 @@ import proyecto.nequi.api_franquicias.domain.usecase.ProductUseCase;
 public class UseCasesConfig {
 
     @Bean
-    public FranchiseServicePort franquiciaServicePort(FranchisePersistencePort franchisePersistencePort) {
+    public FranchiseServicePort franchiseServicePort(FranchisePersistencePort franchisePersistencePort) {
         return new FranchiseUseCase(franchisePersistencePort);
     }
 
     @Bean
-    public BranchServicePort sucursalServicePort(BranchPersistencePort branchPersistencePort) {
+    public BranchServicePort branchServicePort(BranchPersistencePort branchPersistencePort) {
         return new BranchUseCase(branchPersistencePort);
     }
 
     @Bean
-    public ProductServicePort productoServicePort(ProductPersistencePort productPersistencePort) {
+    public ProductServicePort productServicePort(ProductPersistencePort productPersistencePort) {
         return new ProductUseCase(productPersistencePort);
     }
     @Bean

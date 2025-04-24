@@ -62,7 +62,7 @@ class FranchiseHandlerTest {
     @BeforeEach
     void setUp() {
         FranchiseRouter franchiseRouter = new FranchiseRouter();
-        routerFunction = franchiseRouter.franquiciaRoutes(franchiseHandler);
+        routerFunction = franchiseRouter.franchiseRoutes(franchiseHandler);
         webTestClient = WebTestClient.bindToRouterFunction(routerFunction).build();
     }
 
@@ -78,7 +78,7 @@ class FranchiseHandlerTest {
         when(dtoMapper.toDto(any(Franchise.class))).thenReturn(responseDto);
 
         webTestClient.post()
-                .uri("/franquicias")
+                .uri("/franchises")
                 .bodyValue(requestDto)
                 .exchange()
                 .expectStatus().isCreated()
@@ -99,7 +99,7 @@ class FranchiseHandlerTest {
                 .thenReturn(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NAME_FOUND)));
 
         webTestClient.post()
-                .uri("/franquicias")
+                .uri("/franchises")
                 .bodyValue(requestDto)
                 .exchange()
                 .expectStatus().isBadRequest()
@@ -118,7 +118,7 @@ class FranchiseHandlerTest {
                 .thenReturn(Mono.error(new TechnicalException(TechnicalMessage.FAILED_TO_SAVE_ENTITY)));
 
         webTestClient.post()
-                .uri("/franquicias")
+                .uri("/franchises")
                 .bodyValue(requestDto)
                 .exchange()
                 .expectStatus().isEqualTo(500)
@@ -137,7 +137,7 @@ class FranchiseHandlerTest {
         when(dtoMapper.toDto(any(Franchise.class))).thenReturn(responseDto);
 
         webTestClient.put()
-                .uri("/franquicias/1")
+                .uri("/franchises/1")
                 .bodyValue(requestDto)
                 .exchange()
                 .expectStatus().isOk()
@@ -157,7 +157,7 @@ class FranchiseHandlerTest {
                 .thenReturn(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NOT_FOUND)));
 
         webTestClient.put()
-                .uri("/franquicias/999")
+                .uri("/franchises/999")
                 .bodyValue(requestDto)
                 .exchange()
                 .expectStatus().isNotFound()
@@ -177,7 +177,7 @@ class FranchiseHandlerTest {
 
         // Act & Assert
         webTestClient.put()
-                .uri("/franquicias/1")
+                .uri("/franchises/1")
                 .bodyValue(requestDto)
                 .exchange()
                 .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -200,7 +200,7 @@ class FranchiseHandlerTest {
         when(detailsMapper.toDto(domain)).thenReturn(responseDto);
 
         webTestClient.get()
-                .uri("/franquicias/1/full")
+                .uri("/franchises/1/full")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
@@ -218,7 +218,7 @@ class FranchiseHandlerTest {
                 .thenReturn(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NOT_FOUND)));
 
         webTestClient.get()
-                .uri("/franquicias/999/full")
+                .uri("/franchises/999/full")
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody()
@@ -233,7 +233,7 @@ class FranchiseHandlerTest {
 
         when(optionalServicePort.getFranchiseWithDetails(franquiciaId)).thenReturn(Mono.error(technicalException));
 
-        webTestClient.get().uri("/franquicias/{id}/full", franquiciaId)
+        webTestClient.get().uri("/franchises/{id}/full", franquiciaId)
                 .exchange()
                 .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
                 .expectBody()
@@ -290,7 +290,7 @@ class FranchiseHandlerTest {
         when(franquiciaServicePort.deleteFranchise(franquiciaId)).thenReturn(Mono.empty());
 
         webTestClient.delete()
-                .uri("/franquicias/{id}", franquiciaId)
+                .uri("/franchises/{id}", franquiciaId)
                 .exchange()
                 .expectStatus().isNoContent();
     }
@@ -302,7 +302,7 @@ class FranchiseHandlerTest {
                 .thenReturn(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NOT_FOUND)));
 
         webTestClient.delete()
-                .uri("/franquicias/{id}", franquiciaId)
+                .uri("/franchises/{id}", franquiciaId)
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody()
@@ -318,7 +318,7 @@ class FranchiseHandlerTest {
                 .thenReturn(Mono.error(new TechnicalException(TechnicalMessage.INTERNAL_SERVER_ERROR)));
 
         webTestClient.delete()
-                .uri("/franquicias/{id}", franquiciaId)
+                .uri("/franchises/{id}", franquiciaId)
                 .exchange()
                 .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
                 .expectBody()

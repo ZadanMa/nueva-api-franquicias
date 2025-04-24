@@ -1,6 +1,8 @@
 package proyecto.nequi.api_franquicias.infrastructure.adapters.persistence;
 
 import org.springframework.stereotype.Component;
+import proyecto.nequi.api_franquicias.domain.enums.TechnicalMessage;
+import proyecto.nequi.api_franquicias.domain.exceptions.BusinessException;
 import proyecto.nequi.api_franquicias.domain.model.BranchWithProductos;
 import proyecto.nequi.api_franquicias.domain.model.FranchiseWithDetails;
 import proyecto.nequi.api_franquicias.domain.spi.FranchisePersistencePorts;
@@ -28,31 +30,35 @@ public class FranchisePersistenceAdapters implements FranchisePersistencePorts {
         this.productMapper = productMapper;
     }
 
-    @Override
-    public Mono<FranchiseWithDetails> findWithDetailsById(Long id) {
-        return franchiseRepository.findById(id)
-                .switchIfEmpty(Mono.empty())
-                .flatMap(franquiciaEntity -> {
-                    Flux<BranchWithProductos> sucursalesWithProducts = branchRepository.findByFranchiseId(id)
-                            .flatMap(sucursalEntity -> {
-                                return productRepository.findByBranchId(sucursalEntity.getId())
-                                        .map(productMapper::toModel)
-                                        .collectList()
-                                        .map(productos -> new BranchWithProductos(
-                                                sucursalEntity.getId(),
-                                                sucursalEntity.getName(),
-                                                sucursalEntity.getFranchiseId(),
-                                                productos
-                                        ));
-                            });
+@Override
+public Mono<FranchiseWithDetails> findWithDetailsById(Long id) {
+    return franchiseRepository.findById(id)
+            .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NAME_FOUND)))
+            .flatMap(franquiciaEntity -> {
+                Flux<BranchWithProductos> sucursalesWithProducts = branchRepository.findByFranchiseId(id)
+                        .flatMap(sucursalEntity -> productRepository.findByBranchId(sucursalEntity.getId())
+                                .map(productMapper::toModel)
+                                .collectList()
+                                .map(productos -> new BranchWithProductos(
+                                        sucursalEntity.getId(),
+                                        sucursalEntity.getName(),
+                                        sucursalEntity.getFranchiseId(),
+                                        productos
+                                ))
+                        );
 
-                    return sucursalesWithProducts.collectList()
-                            .map(sucursales -> new FranchiseWithDetails(
-                                    franquiciaEntity.getId(),
-                                    franquiciaEntity.getName(),
-                                    sucursales
-                            ));
-                });
-    }
+                return sucursalesWithProducts.collectList()
+                        .map(sucursales -> new FranchiseWithDetails(
+                                franquiciaEntity.getId(),
+                                franquiciaEntity.getName(),
+                                sucursales
+                        ));
+            })
+            .onErrorResume(e -> {
+                // Log the error and return an appropriate fallback or rethrow
+                System.err.println("Error fetching franchise details: " + e.getMessage());
+                return Mono.error(e);
+            });
+}
 
 }

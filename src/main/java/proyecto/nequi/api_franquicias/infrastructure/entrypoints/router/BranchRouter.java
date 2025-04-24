@@ -99,7 +99,7 @@ public class BranchRouter {
                 .GET("/sucursales", handler::getAllBranch)
                 .GET("/sucursales/{sucursalId}", handler::getBranchById)
                 .PUT("/sucursales/{sucursalId}/nombre", handler::updateNameBranch)
-                .GET("/franquicias/{franquiciaId}/productos-mas-stock", handler::productMostStockPerBranch)
+                .GET("/franchises/{franquiciaId}/productos-mas-stock", handler::productMostStockPerBranch)
                 .build();
     }
 }

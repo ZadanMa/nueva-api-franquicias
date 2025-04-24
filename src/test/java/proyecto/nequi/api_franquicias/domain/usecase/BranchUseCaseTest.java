@@ -33,7 +33,7 @@ class BranchUseCaseTest {
         Branch branch = new Branch(null, "Branch A", 1L);
         Branch savedBranch = new Branch(101L, "Branch A", 1L);
 
-        when(persistencePort.existsByFranquiciaIdAndNombre(1L, "Branch A")).thenReturn(Mono.just(false));
+        when(persistencePort.existsByFranchiseIdAndName(1L, "Branch A")).thenReturn(Mono.just(false));
         when(persistencePort.save(branch)).thenReturn(Mono.just(savedBranch));
 
         StepVerifier.create(sucursalUseCase.registerBranch(branch))
@@ -45,7 +45,7 @@ class BranchUseCaseTest {
     void testRegisterBranch_AlreadyExists() {
         Branch branch = new Branch(null, "Branch A", 1L);
 
-        when(persistencePort.existsByFranquiciaIdAndNombre(1L, "Branch A")).thenReturn(Mono.just(true));
+        when(persistencePort.existsByFranchiseIdAndName(1L, "Branch A")).thenReturn(Mono.just(true));
 
         StepVerifier.create(sucursalUseCase.registerBranch(branch))
                 .expectError(BusinessException.class)
@@ -83,7 +83,7 @@ class BranchUseCaseTest {
         Branch existingBranch = new Branch(sucursalId, "Branch Vieja", 1L);
 
         when(persistencePort.findById(sucursalId)).thenReturn(Mono.just(existingBranch));
-        when(persistencePort.existsByFranquiciaIdAndNombre(1L, nuevoNombre)).thenReturn(Mono.just(false));
+        when(persistencePort.existsByFranchiseIdAndName(1L, nuevoNombre)).thenReturn(Mono.just(false));
         when(persistencePort.updateNombre(sucursalId, nuevoNombre)).thenReturn(Mono.just(new Branch(sucursalId, nuevoNombre, 1L)));
 
         StepVerifier.create(sucursalUseCase.updateNameBranch(sucursalId, nuevoNombre))
@@ -98,7 +98,7 @@ class BranchUseCaseTest {
         Branch existingBranch = new Branch(sucursalId, "Branch Vieja", 1L);
 
         when(persistencePort.findById(sucursalId)).thenReturn(Mono.just(existingBranch));
-        when(persistencePort.existsByFranquiciaIdAndNombre(1L, nuevoNombre)).thenReturn(Mono.just(true));
+        when(persistencePort.existsByFranchiseIdAndName(1L, nuevoNombre)).thenReturn(Mono.just(true));
 
         StepVerifier.create(sucursalUseCase.updateNameBranch(sucursalId, nuevoNombre))
                 .expectError(BusinessException.class)

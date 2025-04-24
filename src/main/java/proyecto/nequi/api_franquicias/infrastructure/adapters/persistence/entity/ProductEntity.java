@@ -6,12 +6,12 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Data
-@Table("products")
+@Table("productos")
 public class ProductEntity {
     @Id
     private Long id;
     private String name;
     private int stock;
-    @Column("sucursal_id")
+    @Column("branch_id")
     private Long branchId;
 }

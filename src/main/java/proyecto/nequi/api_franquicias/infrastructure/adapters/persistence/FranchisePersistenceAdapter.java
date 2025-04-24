@@ -28,8 +28,8 @@ public class FranchisePersistenceAdapter implements FranchisePersistencePort {
     }
 
     @Override
-    public Mono<Boolean> existsByName(String nombre) {
-        return repository.existsByName(nombre);
+    public Mono<Boolean> existsByName(String name) {
+        return repository.existsByName(name);
     }
 
     @Override

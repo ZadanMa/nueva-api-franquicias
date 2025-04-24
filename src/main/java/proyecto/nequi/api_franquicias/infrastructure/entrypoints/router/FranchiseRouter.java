@@ -118,12 +118,12 @@ public class FranchiseRouter {
                     )
             )
     })
-    public RouterFunction<ServerResponse> franquiciaRoutes(FranchiseHandler handler) {
+    public RouterFunction<ServerResponse> franchiseRoutes(FranchiseHandler handler) {
         return route()
-                .POST("/franquicias", handler::registerFranchise)
-                .PUT("/franquicias/{id}", handler::updateFranchiseName)
-                .GET("/franquicias/{id}/full", handler::getFranchiseWithDetails)
-                .DELETE("/franquicias/{id}", handler::deleteFranchise)
+                .POST("/franchises", handler::registerFranchise)
+                .PUT("/franchises/{id}", handler::updateFranchiseName)
+                .GET("/franchises/{id}/full", handler::getFranchiseWithDetails)
+                .DELETE("/franchises/{id}", handler::deleteFranchise)
                 .build();
     }
 }

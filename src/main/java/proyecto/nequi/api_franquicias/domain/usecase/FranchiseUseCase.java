@@ -1,5 +1,7 @@
 package proyecto.nequi.api_franquicias.domain.usecase;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import proyecto.nequi.api_franquicias.domain.api.FranchiseServicePort;
 import proyecto.nequi.api_franquicias.domain.enums.TechnicalMessage;
 import proyecto.nequi.api_franquicias.domain.exceptions.BusinessException;
@@ -13,17 +15,22 @@ public class FranchiseUseCase implements FranchiseServicePort {
 
     private final FranchisePersistencePort persistencePort;
 
+    private final Logger log = LoggerFactory.getLogger(FranchiseUseCase.class);
     public FranchiseUseCase(FranchisePersistencePort persistencePort) {
         this.persistencePort = persistencePort;
     }
 
     @Override
     public Mono<Franchise> registerFranchise(Franchise franchise) {
+
         return persistencePort.existsByName(franchise.name())
                 .flatMap(exists -> exists
                         ? Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NAME_FOUND))
                         : persistencePort.save(franchise))
-                .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_SAVE_ENTITY));
+                .onErrorMap(ex -> {
+                    log.error("Error técnico al recuperar franquicia: {}", ex.getMessage());
+                    return new TechnicalException(TechnicalMessage.FAILED_TO_SAVE_ENTITY);
+                });
     }
 
     @Override

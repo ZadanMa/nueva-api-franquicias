@@ -281,7 +281,7 @@ class BranchHandlerTest {
         when(servicePort.productMostStockPerBranch(franquiciaId))
                 .thenReturn(Flux.just(productoData));
 
-        webTestClient.get().uri("/franquicias/{franquiciaId}/productos-mas-stock", franquiciaId)
+        webTestClient.get().uri("/franchises/{franquiciaId}/productos-mas-stock", franquiciaId)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
@@ -299,7 +299,7 @@ class BranchHandlerTest {
 
         when(servicePort.productMostStockPerBranch(franquiciaId)).thenReturn(Flux.error(businessException));
 
-        webTestClient.get().uri("/franquicias/{franquiciaId}/productos-mas-stock", franquiciaId)
+        webTestClient.get().uri("/franchises/{franquiciaId}/productos-mas-stock", franquiciaId)
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody()
@@ -314,7 +314,7 @@ class BranchHandlerTest {
 
         when(servicePort.productMostStockPerBranch(franquiciaId)).thenReturn(Flux.error(technicalException));
 
-        webTestClient.get().uri("/franquicias/{franquiciaId}/productos-mas-stock", franquiciaId)
+        webTestClient.get().uri("/franchises/{franquiciaId}/productos-mas-stock", franquiciaId)
                 .exchange()
                 .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
                 .expectBody()

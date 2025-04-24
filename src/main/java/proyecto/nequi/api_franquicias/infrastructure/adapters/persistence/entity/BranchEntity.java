@@ -6,11 +6,11 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Data
-@Table("branchFull")
+@Table("sucursales")
 public class BranchEntity {
     @Id
     private Long id;
     private String name;
-    @Column("franquicia_id")
+    @Column("franchise_id")
     private Long franchiseId;
 }

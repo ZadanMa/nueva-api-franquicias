@@ -6,10 +6,10 @@ import reactor.core.publisher.Mono;
 
 public interface ProductPersistencePort {
     Mono<Product> save(Product product);
-    Mono<Boolean> existsBySucursalIdAndNombre(Long sucursalId, String nombre);
-    Mono<Product> findById(Long productoId);
-    Mono<Product> updateNombre(Long productoId, String nuevoNombre);
-    Mono<Product> updateStock(Long productoId, int nuevoStock);
+    Mono<Boolean> existsBySucursalIdAndNombre(Long branchId, String name);
+    Mono<Product> findById(Long productId);
+    Mono<Product> updateNombre(Long productId, String newName);
+    Mono<Product> updateStock(Long productId, int newStock);
     Flux<Product> findAll();
-    Mono<Void> deleteById(Long productoId);
+    Mono<Void> deleteById(Long productId);
 }

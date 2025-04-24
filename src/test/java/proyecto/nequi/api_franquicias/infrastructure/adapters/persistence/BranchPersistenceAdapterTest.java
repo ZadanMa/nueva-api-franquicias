@@ -54,10 +54,10 @@ class BranchPersistenceAdapterTest {
     }
 
     @Test
-    void testExistsByFranquiciaIdAndNombre() {
+    void testExistsByFranchiseIdAndName() {
         when(repository.existsByFranchiseIdAndName(1L, "Branch A")).thenReturn(Mono.just(true));
 
-        StepVerifier.create(adapter.existsByFranquiciaIdAndNombre(1L, "Branch A"))
+        StepVerifier.create(adapter.existsByFranchiseIdAndName(1L, "Branch A"))
                 .expectNext(true)
                 .verifyComplete();
     }

@@ -26,26 +26,26 @@ public class ProductPersistenceAdapter implements ProductPersistencePort {
     }
 
     @Override
-    public Mono<Boolean> existsBySucursalIdAndNombre(Long sucursalId, String nombre) {
-        return repository.existsByBranchIdAndName(sucursalId, nombre);
+    public Mono<Boolean> existsBySucursalIdAndNombre(Long branchId, String name) {
+        return repository.existsByBranchIdAndName(branchId, name);
     }
 
     @Override
-    public Mono<Product> findById(Long productoId) {
-        return repository.findById(productoId)
+    public Mono<Product> findById(Long productId) {
+        return repository.findById(productId)
                 .map(mapper::toModel);
     }
 
     @Override
-    public Mono<Void> deleteById(Long productoId) {
-        return repository.deleteById(productoId);
+    public Mono<Void> deleteById(Long productId) {
+        return repository.deleteById(productId);
     }
 
     @Override
-    public Mono<Product> updateStock(Long productoId, int nuevoStock) {
-        return repository.findById(productoId)
+    public Mono<Product> updateStock(Long productId, int newStock) {
+        return repository.findById(productId)
                 .flatMap(entity -> {
-                    entity.setStock(nuevoStock);
+                    entity.setStock(newStock);
                     return repository.save(entity);
                 })
                 .map(mapper::toModel);
@@ -59,10 +59,10 @@ public class ProductPersistenceAdapter implements ProductPersistencePort {
     }
 
     @Override
-    public Mono<Product> updateNombre(Long productoId, String nuevoNombre) {
-        return repository.findById(productoId)
+    public Mono<Product> updateNombre(Long productId, String newName) {
+        return repository.findById(productId)
                 .flatMap(entity -> {
-                    entity.setName(nuevoNombre);
+                    entity.setName(newName);
                     return repository.save(entity);
                 })
                 .map(mapper::toModel);

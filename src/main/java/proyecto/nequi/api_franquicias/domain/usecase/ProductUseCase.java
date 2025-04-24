@@ -32,51 +32,51 @@ public class ProductUseCase implements ProductServicePort {
     }
 
     @Override
-    public Mono<Product> getProductById(Long productoId) {
-        return persistencePort.findById(productoId)
+    public Mono<Product> getProductById(Long productId) {
+        return persistencePort.findById(productId)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND)))
                 .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_RETRIEVE_ENTITY));
     }
 
     @Override
-    public Mono<Void> deleteProduct(Long productoId) {
+    public Mono<Void> deleteProduct(Long productId) {
 
-        return persistencePort.findById(productoId)
+        return persistencePort.findById(productId)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND)))
-                .flatMap(existing -> persistencePort.deleteById(productoId))
+                .flatMap(existing -> persistencePort.deleteById(productId))
                 .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_DELETE_ENTITY));
     }
 
     @Override
-    public Mono<Product> updateNameProduct(Long productoId, String nuevoNombre) {
-        return persistencePort.findById(productoId)
+    public Mono<Product> updateNameProduct(Long productId, String newName) {
+        return persistencePort.findById(productId)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND)))
-                .flatMap(existing -> persistencePort.existsBySucursalIdAndNombre(existing.branchId(), nuevoNombre)
+                .flatMap(existing -> persistencePort.existsBySucursalIdAndNombre(existing.branchId(), newName)
                         .flatMap(exists -> exists
                                 ? Mono.error(new BusinessException(TechnicalMessage.PRODUCT_ALREADY_EXISTS))
-                                : persistencePort.updateNombre(productoId, nuevoNombre)
+                                : persistencePort.updateNombre(productId, newName)
                                 .thenReturn(new Product(
                                         existing.id(),
-                                        nuevoNombre,
+                                        newName,
                                         existing.stock(),
                                         existing.branchId()
                                 ))))
                 .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_UPDATE_NAME));
     }
     @Override
-    public Mono<Product> modifyProductStock(Long productoId, int nuevoStock) {
-        return persistencePort.findById(productoId)
+    public Mono<Product> modifyProductStock(Long productId, int newStock) {
+        return persistencePort.findById(productId)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND)))
-                .filter(producto -> nuevoStock >= 0)
+                .filter(producto -> newStock >= 0)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NEGATIVE_STOCK)))
                 .flatMap(existing -> {
                     Product updated = new Product(
                             existing.id(),
                             existing.name(),
-                            nuevoStock,
+                            newStock,
                             existing.branchId()
                     );
-                    return persistencePort.updateStock(productoId, nuevoStock).thenReturn(updated);
+                    return persistencePort.updateStock(productId, newStock).thenReturn(updated);
                 })
                 .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_UPDATE_STOCK));
     }

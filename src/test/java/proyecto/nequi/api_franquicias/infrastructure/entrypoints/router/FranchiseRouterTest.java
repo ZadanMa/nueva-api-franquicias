@@ -33,7 +33,7 @@ class FranchiseRouterTest {
     @BeforeEach
     void setUp() {
         FranchiseRouter router = new FranchiseRouter();
-        routerFunction = router.franquiciaRoutes(handler);
+        routerFunction = router.franchiseRoutes(handler);
         webTestClient = WebTestClient.bindToRouterFunction(routerFunction).build();
     }
 
@@ -57,7 +57,7 @@ class FranchiseRouterTest {
 
         // Act & Assert
         webTestClient.post()
-                .uri("/franquicias")
+                .uri("/franchises")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(dto)
                 .exchange()
@@ -89,7 +89,7 @@ class FranchiseRouterTest {
 
         // Act & Assert
         webTestClient.put()
-                .uri("/franquicias/1")
+                .uri("/franchises/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(updateDto)
                 .exchange()
@@ -120,7 +120,7 @@ class FranchiseRouterTest {
 
         // Act & Assert
         webTestClient.get()
-                .uri("/franquicias/1/full")
+                .uri("/franchises/1/full")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
@@ -134,7 +134,7 @@ class FranchiseRouterTest {
     void testRouteNotFound() {
         // Verificar que una ruta no definida retorna 404
         webTestClient.get()
-                .uri("/franquicias/ruta-que-no-existe")
+                .uri("/franchises/ruta-que-no-existe")
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -157,7 +157,7 @@ class FranchiseRouterTest {
 
         // Act & Assert
         webTestClient.put()
-                .uri("/franquicias/999")
+                .uri("/franchises/999")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(updateDto)
                 .exchange()

@@ -9,7 +9,7 @@ import java.util.Map;
 public interface BranchServicePort {
     Mono<Branch> registerBranch(Branch branch);
     Flux<Branch> getAllSucursales();
-    Mono<Branch> getBranchById(Long sucursalId);
-    Mono<Branch> updateNameBranch(Long sucursalId, String nuevoNombre);
-    Flux<Map<String, Object>> productMostStockPerBranch(Long franquiciaId);
+    Mono<Branch> getBranchById(Long branchId);
+    Mono<Branch> updateNameBranch(Long branchId, String newName);
+    Flux<Map<String, Object>> productMostStockPerBranch(Long franchiseId);
 }

@@ -27,8 +27,6 @@ import java.util.List;
 @Tag(name = "Franquicias", description = "Endpoints para gestión de franquicias")
 public class FranchiseHandler {
 
-    private static Logger log = LoggerFactory.getLogger(FranchiseHandler.class);
-
     private final FranchiseServicePort servicePort;
     private final OptionalServicePort optionalServicePort;
     private final FranchiseDTOMapper dtoMapper;
@@ -57,7 +55,6 @@ public class FranchiseHandler {
                 )
                 .flatMap(response -> ServerResponse.status(201).bodyValue(response))
                 .onErrorResume(BusinessException.class, ex -> {
-                    log.error("Error de negocio: {}", ex.getMessage());
                     return ServerResponse.badRequest().bodyValue(
                             APIResponse.builder()
                                     .code(ex.getTechnicalMessage().getCode())
@@ -70,7 +67,6 @@ public class FranchiseHandler {
                     );
                 })
                 .onErrorResume(TechnicalException.class, ex -> {
-                    log.error("Error técnico: {}", ex.getMessage());
                     return ServerResponse.status(500).bodyValue(
                             APIResponse.builder()
                                     .code(ex.getTechnicalMessage().getCode())
@@ -80,7 +76,6 @@ public class FranchiseHandler {
                 });
     }
 
-    // Actualizar Nombre
     public Mono<ServerResponse> updateFranchiseName(ServerRequest request) {
         Long id = Long.valueOf(request.pathVariable("id"));
         return request.bodyToMono(FranchiseUpdateDTO.class)

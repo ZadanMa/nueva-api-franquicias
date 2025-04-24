@@ -21,7 +21,7 @@ public class BranchUseCase implements BranchServicePort {
 
     @Override
     public Mono<Branch> registerBranch(Branch branch) {
-        return persistencePort.existsByFranquiciaIdAndNombre(branch.franchiseId(), branch.name())
+        return persistencePort.existsByFranchiseIdAndName(branch.franchiseId(), branch.name())
                 .flatMap(exists -> exists
                         ? Mono.error(new BusinessException(TechnicalMessage.SUCURSAL_ALREADY_EXISTS))
                         : persistencePort.save(branch))
@@ -34,25 +34,25 @@ public class BranchUseCase implements BranchServicePort {
     }
 
     @Override
-    public Mono<Branch> getBranchById(Long sucursalId) {
-        return persistencePort.findById(sucursalId)
+    public Mono<Branch> getBranchById(Long branchId) {
+        return persistencePort.findById(branchId)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.SUCURSAL_NOT_FOUND)))
                 .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_FIND_ENTITY));
     }
 
     @Override
-    public Mono<Branch> updateNameBranch(Long sucursalId, String nuevoNombre) {
-        return persistencePort.findById(sucursalId)
+    public Mono<Branch> updateNameBranch(Long branchId, String newName) {
+        return persistencePort.findById(branchId)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.SUCURSAL_NOT_FOUND)))
-                .flatMap(sucursal -> persistencePort.existsByFranquiciaIdAndNombre(sucursal.franchiseId(), nuevoNombre)
+                .flatMap(sucursal -> persistencePort.existsByFranchiseIdAndName(sucursal.franchiseId(), newName)
                         .flatMap(exists -> exists
                                 ? Mono.error(new BusinessException(TechnicalMessage.SUCURSAL_ALREADY_EXISTS))
-                                : persistencePort.updateNombre(sucursalId, nuevoNombre)))
+                                : persistencePort.updateNombre(branchId, newName)))
                 .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_UPDATE_NAME));
     }
 
     @Override
-    public Flux<Map<String, Object>> productMostStockPerBranch(Long franquiciaId) {
-        return persistencePort.productMostStockPerBranch(franquiciaId);
+    public Flux<Map<String, Object>> productMostStockPerBranch(Long franchiseId) {
+        return persistencePort.productMostStockPerBranch(franchiseId);
     }
 }

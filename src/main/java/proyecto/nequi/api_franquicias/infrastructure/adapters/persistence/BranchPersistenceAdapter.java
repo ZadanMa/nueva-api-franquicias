@@ -27,8 +27,8 @@ public class BranchPersistenceAdapter implements BranchPersistencePort {
     }
 
     @Override
-    public Mono<Boolean> existsByFranquiciaIdAndNombre(Long franquiciaId, String nombre) {
-        return repository.existsByFranchiseIdAndName(franquiciaId, nombre);
+    public Mono<Boolean> existsByFranchiseIdAndName(Long franchiseId, String name) {
+        return repository.existsByFranchiseIdAndName(franchiseId, name);
     }
 
     @Override
@@ -38,10 +38,10 @@ public class BranchPersistenceAdapter implements BranchPersistencePort {
     }
 
     @Override
-    public Mono<Branch> updateNombre(Long sucursalId, String nuevoNombre) {
-        return repository.findById(sucursalId)
+    public Mono<Branch> updateNombre(Long branchId, String newName) {
+        return repository.findById(branchId)
                 .flatMap(entity -> {
-                    entity.setName(nuevoNombre);
+                    entity.setName(newName);
                     return repository.save(entity);
                 })
                 .map(mapper::toModel);
@@ -54,7 +54,7 @@ public class BranchPersistenceAdapter implements BranchPersistencePort {
     }
 
     @Override
-    public Flux<Map<String, Object>> productMostStockPerBranch(Long franquiciaId) {
-        return repository.productoConMasStockPorSucursal(franquiciaId);
+    public Flux<Map<String, Object>> productMostStockPerBranch(Long franchiseId) {
+        return repository.productoConMasStockPorSucursal(franchiseId);
     }
 }
