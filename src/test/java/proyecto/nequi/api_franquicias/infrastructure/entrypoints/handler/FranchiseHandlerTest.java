@@ -22,7 +22,7 @@ import proyecto.nequi.api_franquicias.domain.model.FranchiseWithDetails;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.FranchiseDTO;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.FranchiseUpdateDTO;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.FranchiseWithDetailsDTO;
-import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.SucursalWithProductsDTO;
+import proyecto.nequi.api_franquicias.infrastructure.entrypoints.dto.BranchWithProductsDTO;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.mapper.FranchiseDTOMapper;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.mapper.FranchiseWithDetailsDTOMapper;
 import proyecto.nequi.api_franquicias.infrastructure.entrypoints.router.FranchiseRouter;
@@ -193,7 +193,7 @@ class FranchiseHandlerTest {
         List<BranchWithProductos> sucursales = Collections.emptyList();
         FranchiseWithDetails domain = new FranchiseWithDetails(franquiciaId, "Test Franchise", sucursales);
 
-        List<SucursalWithProductsDTO> sucursalesDto = Collections.emptyList();
+        List<BranchWithProductsDTO> sucursalesDto = Collections.emptyList();
         FranchiseWithDetailsDTO responseDto = new FranchiseWithDetailsDTO(franquiciaId, "Test Franchise", sucursalesDto);
 
         when(optionalServicePort.getFranchiseWithDetails(franquiciaId)).thenReturn(Mono.just(domain));
@@ -274,7 +274,7 @@ class FranchiseHandlerTest {
         List<BranchWithProductos> sucursales = Collections.emptyList();
         FranchiseWithDetails detailsDomain = new FranchiseWithDetails(1L, "Test Franchise", sucursales);
 
-        List<SucursalWithProductsDTO> sucursalesDto = Collections.emptyList();
+        List<BranchWithProductsDTO> sucursalesDto = Collections.emptyList();
         FranchiseWithDetailsDTO detailsDto = new FranchiseWithDetailsDTO(1L, "Test Franchise", sucursalesDto);
 
         when(optionalServicePort.getFranchiseWithDetails(1L)).thenReturn(Mono.just(detailsDomain));

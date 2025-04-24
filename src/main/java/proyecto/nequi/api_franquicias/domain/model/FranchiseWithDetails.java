@@ -5,5 +5,5 @@ import java.util.List;
 public record FranchiseWithDetails(
         Long id,
         String name,
-        List<BranchWithProductos> branchFull
+        List<BranchWithProductos> sucursales
 ){}

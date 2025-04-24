@@ -28,7 +28,7 @@ public class BranchRouter {
     @Bean
     @RouterOperations({
             @RouterOperation(
-                    path = "/branchFull",
+                    path = "/sucursales",
                     method = RequestMethod.POST,
                     produces = MediaType.APPLICATION_JSON_VALUE,
                     beanClass = BranchHandler.class,
@@ -44,7 +44,7 @@ public class BranchRouter {
                     )
             ),
             @RouterOperation(
-                    path = "/branchFull/{branchId}",
+                    path = "/sucursales/{branchId}",
                     method = RequestMethod.GET,
                     produces = MediaType.APPLICATION_JSON_VALUE,
                     beanClass = BranchHandler.class,
@@ -60,7 +60,7 @@ public class BranchRouter {
                     )
             ),
             @RouterOperation(
-                    path = "/branchFull/{branchId}/name",
+                    path = "/sucursales/{branchId}/name",
                     method = RequestMethod.PUT,
                     produces = MediaType.APPLICATION_JSON_VALUE,
                     beanClass = BranchHandler.class,

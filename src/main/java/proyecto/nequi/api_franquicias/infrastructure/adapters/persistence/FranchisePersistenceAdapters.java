@@ -55,7 +55,6 @@ public Mono<FranchiseWithDetails> findWithDetailsById(Long id) {
                         ));
             })
             .onErrorResume(e -> {
-                // Log the error and return an appropriate fallback or rethrow
                 System.err.println("Error fetching franchise details: " + e.getMessage());
                 return Mono.error(e);
             });
