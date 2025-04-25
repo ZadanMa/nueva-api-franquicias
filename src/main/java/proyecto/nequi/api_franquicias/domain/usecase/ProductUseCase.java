@@ -40,10 +40,9 @@ public class ProductUseCase implements ProductServicePort {
 
     @Override
     public Mono<Void> deleteProduct(Long productId) {
-
         return persistencePort.findById(productId)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND)))
-                .flatMap(existing -> persistencePort.deleteById(productId))
+                .then(persistencePort.deleteById(productId))
                 .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_DELETE_ENTITY));
     }
 
@@ -67,7 +66,7 @@ public class ProductUseCase implements ProductServicePort {
     public Mono<Product> modifyProductStock(Long productId, int newStock) {
         return persistencePort.findById(productId)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND)))
-                .filter(producto -> newStock >= 0)
+                .filter( __ -> newStock >= 0)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NEGATIVE_STOCK)))
                 .flatMap(existing -> {
                     Product updated = new Product(

@@ -37,17 +37,17 @@ public class FranchiseUseCase implements FranchiseServicePort {
     public Mono<Franchise> updateFranchiseName(Long id, String newName) {
         return persistencePort.findById(id)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NOT_FOUND)))
-                .flatMap(existing -> persistencePort.existsByName(newName)
-                        .flatMap(exists -> exists
+                .then(persistencePort.existsByName(newName))
+                .flatMap(exists -> exists
                                 ? Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NAME_FOUND))
-                                : persistencePort.updateName(id, newName)))
+                                : persistencePort.updateName(id, newName))
                 .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_UPDATE_NAME));
     }
     @Override
     public Mono<Void> deleteFranchise(Long id) {
         return persistencePort.findById(id)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.FRANQUICIA_NOT_FOUND)))
-                .flatMap(existing -> persistencePort.deleteById(id))
+                .then(persistencePort.deleteById(id))
                 .onErrorMap(e -> e instanceof BusinessException ? e : new TechnicalException(TechnicalMessage.FAILED_TO_DELETE_ENTITY));
     }
 }

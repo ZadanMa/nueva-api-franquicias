@@ -1,8 +1,6 @@
 package proyecto.nequi.api_franquicias.infrastructure.entrypoints.handler;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -77,16 +75,17 @@ public class FranchiseHandler {
     }
 
     public Mono<ServerResponse> updateFranchiseName(ServerRequest request) {
-        Long id = Long.valueOf(request.pathVariable("id"));
-        return request.bodyToMono(FranchiseUpdateDTO.class)
-                .flatMap(dto -> servicePort.updateFranchiseName(id, dto.newName())
-                        .map(franquicia -> APIResponse.<FranchiseDTO>builder()
-                                .code(TechnicalMessage.FRANQUICIA_UPDATED.getCode())
-                                .message(TechnicalMessage.FRANQUICIA_UPDATED.getMessage())
-                                .data(dtoMapper.toDto(franquicia))
-                                .build()
-                        )
-                )
+        return Mono.just(request.pathVariable("id"))
+                .map(Long::valueOf)
+                .flatMap(id -> request.bodyToMono(FranchiseUpdateDTO.class)
+                        .flatMap(dto -> servicePort.updateFranchiseName(id, dto.newName())
+                                .map(franquicia -> APIResponse.<FranchiseDTO>builder()
+                                        .code(TechnicalMessage.FRANQUICIA_UPDATED.getCode())
+                                        .message(TechnicalMessage.FRANQUICIA_UPDATED.getMessage())
+                                        .data(dtoMapper.toDto(franquicia))
+                                        .build()
+                                )
+                        ))
                 .flatMap(response -> ServerResponse.ok().bodyValue(response))
                 .onErrorResume(BusinessException.class, ex -> ServerResponse.status(HttpStatus.NOT_FOUND)
                         .bodyValue(APIResponse.builder()
@@ -103,8 +102,9 @@ public class FranchiseHandler {
     }
 
     public Mono<ServerResponse> getFranchiseWithDetails(ServerRequest request) {
-        Long id = Long.valueOf(request.pathVariable("id"));
-        return optionalServicePort.getFranchiseWithDetails(id)
+        return Mono.just(request.pathVariable("id"))
+                .map(Long::valueOf)
+                .flatMap(id -> optionalServicePort.getFranchiseWithDetails(id))
                 .map(detailsMapper::toDto)
                 .flatMap(dto -> ServerResponse.ok()
                         .bodyValue(APIResponse.<FranchiseWithDetailsDTO>builder()
@@ -128,8 +128,9 @@ public class FranchiseHandler {
     }
 
     public Mono<ServerResponse> deleteFranchise(ServerRequest request) {
-        Long id = Long.valueOf(request.pathVariable("id"));
-        return servicePort.deleteFranchise(id)
+        return Mono.just(request.pathVariable("id"))
+                .map(Long::valueOf)
+                .flatMap(id -> servicePort.deleteFranchise(id))
                 .thenReturn(APIResponse.builder()
                         .code(TechnicalMessage.FRANQUICIA_DELETED.getCode())
                         .message(TechnicalMessage.FRANQUICIA_DELETED.getMessage())
