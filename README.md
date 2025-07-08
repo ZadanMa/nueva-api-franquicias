@@ -199,8 +199,8 @@ docker run -p 8080:8080 --name api-franquicias api-franquicias
 - Se recomienda el uso de herramientas como Postman o cURL para probar los endpoint
 
 
-> _[!TIP]_
-eSTO ES IMPORTANTE QUE NO SEA EL MISMO NOMBRE DE LA API QUE SE USARA EN LAS FUNCIONES DE LA API DE FRANQUICIAS
+> [!NOTE]  
+> Highlights information that users should take into account, even when skimming.
 
 
 ## Contribuciones
